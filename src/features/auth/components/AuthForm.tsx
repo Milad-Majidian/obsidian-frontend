@@ -1,4 +1,3 @@
-// src/components/auth/AuthForm.tsx
 "use client";
 
 import { useForm } from "react-hook-form";
@@ -9,11 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
 import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "../schemas/authSchema";
+import { useLogin } from "../hooks/useLogin";
 
 type Mode = "login" | "register";
 
 export function AuthForm({ mode }: { mode: Mode }) {
   const [showPassword, setShowPassword] = useState(false);
+  const {login, isLoading} = useLogin()
 
   const form = useForm<RegisterSchema | LoginSchema>({
     resolver: zodResolver(mode === "register" ? registerSchema : loginSchema),
@@ -22,9 +23,15 @@ export function AuthForm({ mode }: { mode: Mode }) {
       : { email: "", password: "" },
   });
 
-  const onSubmit = (values: any) => {
+  const onSubmit = async (values: any) => {
     console.log("Form data", values);
-    // You can call your API or action here
+     if (mode === 'login') {
+      await login(values);
+    } else {
+      // Handle register here
+    }
+
+
   };
 
   return (
@@ -86,8 +93,8 @@ export function AuthForm({ mode }: { mode: Mode }) {
           )}
         />
 
-        <Button className="w-full" type="submit">
-          {mode === "register" ? "Create an Account" : "Login"}
+        <Button className="w-full" type="submit" disabled={isLoading}>
+          {isLoading ? "loading..." : mode === "register" ? "Create an Account" : "Login"}
         </Button>
       </form>
     </Form>
