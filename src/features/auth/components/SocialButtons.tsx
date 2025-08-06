@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 
-
 export function SocialButtons({ mode }: { mode: "login" | "register" }) {
   return (
     <div className="space-y-2">

@@ -1,4 +1,3 @@
-// src/components/auth/RegisterBox.tsx
 import { AuthForm } from "./AuthForm";
 import { SocialButtons } from "./SocialButtons";
 

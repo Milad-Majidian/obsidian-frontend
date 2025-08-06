@@ -1,4 +1,3 @@
-// src/components/auth/LoginBox.tsx
 import { AuthForm } from "./AuthForm";
 import { SocialButtons } from "./SocialButtons";
 

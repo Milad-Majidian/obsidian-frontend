@@ -39,17 +39,17 @@ export const AuthWrapper = () => {
           <>
             Don’t have an account?{" "}
             <button
-              className="text-primary underline"
+              className="text-primary underline cursor-pointer"
               onClick={() => toggleMode()}
             >
-              Join
+              Create Account
             </button>
           </>
         ) : (
           <>
             Already have an account?{" "}
             <button
-              className="text-primary underline"
+              className="text-primary underline cursor-pointer"
               onClick={() => toggleMode()}
             >
               Log In
