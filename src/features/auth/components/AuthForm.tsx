@@ -9,12 +9,19 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useState } from "react";
 import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "../schemas/authSchema";
 import { useLogin } from "../hooks/useLogin";
+import { signIn } from "next-auth/react";
+import { useToastMessage } from "@/hooks/useToastMessage";
+import { useAuth } from "../hooks/useAuth";
 
 type Mode = "login" | "register";
 
 export function AuthForm({ mode }: { mode: Mode }) {
+    const { user, isAuthenticated, signInWithGoogle, logOut,signInWithEmail } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
-  const {login, isLoading} = useLogin()
+   const {showError,showSuccess } = useToastMessage() 
+  
+   const {login, isLoading} = useLogin()
 
   const form = useForm<RegisterSchema | LoginSchema>({
     resolver: zodResolver(mode === "register" ? registerSchema : loginSchema),
@@ -24,9 +31,15 @@ export function AuthForm({ mode }: { mode: Mode }) {
   });
 
   const onSubmit = async (values: any) => {
-    console.log("Form data", values);
+    const { email, password } = values;
      if (mode === 'login') {
-      await login(values);
+       try {
+         await signInWithEmail({ email, password });
+         showSuccess("Logged in successfully!");
+       } catch (error:any) {
+         showError(error.message);
+       }
+
     } else {
       // Handle register here
     }

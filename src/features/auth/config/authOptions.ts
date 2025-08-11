@@ -1,8 +1,9 @@
-import NextAuth, { type NextAuthOptions } from "next-auth";
+import type { NextAuthConfig } from  "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthConfig = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
@@ -15,31 +16,68 @@ export const authOptions: NextAuthOptions = {
             password: { label: "Password", type: "password" }
         },
         async authorize(credentials) {
+            if (!credentials?.email || !credentials?.password) return null;
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(credentials)
+                body: JSON.stringify({
+                        email: credentials.email,
+                        password: credentials.password,
+                    })
             });
 
-            if (!res.ok) return null;
-            return await res.json();
+            const data = await res.json();
+            if (!res.ok) {
+              throw new Error(data.message || "Invalid email or password");
+            }
+
+            if (data.success && data.user && data.user.id && data.user.email) {
+              return data.user; // Return the user object only
+            }
+
+            return null
         }
     }),
   ],
-   callbacks: {
+   session: {
+    strategy: "jwt",
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+  },
+  callbacks: {
     async jwt({ token, user }) {
-      if (user) token.user = user;
+      if (user) {
+        console.log("JWT callback user:", user);
+        token.id = user.id;
+        token.email = user.email;
+      }
       return token;
     },
     async session({ session, token }) {
-      if (token.user) session.user = token.user;
+      if (!session || !token) {
+          console.error("Missing session or token in session callback");
+       return session;
+        }
+      try {
+        session.user = {
+          id: (token.id ?? "") as string ,
+          email: (token.email ?? "") as string ,
+          emailVerified: null, // or set to a valid Date if available
+        };
+      } catch (error) {
+        console.error("Error setting session user:", error);
+      }
       return session;
-    }
+    },
   },
-  session: {
-    strategy: "jwt"
+  pages: {
+    signIn: "/auth",
+    signOut: "/",
+    error: "/auth/error",
+    verifyRequest: "/auth/verify-request",
   },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
 };
+
+export const { auth, signIn, signOut, handlers } = NextAuth(authOptions);
