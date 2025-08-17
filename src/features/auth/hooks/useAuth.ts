@@ -4,13 +4,12 @@ import { useToastMessage } from "@/hooks/useToastMessage";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-
-export type SignInCredentials = {
+type SignInCredentials = {
   email: string;
   password: string;
 };
 
-export type AuthUser = {
+ type AuthUser = {
   id: string;
   email: string;
   name?: string;
@@ -33,6 +32,7 @@ export function useAuth() {
       if(res.error === "CredentialsSignin") {
         message = "Invalid email or password"
       }
+      console.log('message:', message)
       throw new Error(message);
     }
      router.push("/")
