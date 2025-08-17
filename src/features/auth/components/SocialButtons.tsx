@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
+import {signIn} from "next-auth/react";
 
 export function SocialButtons({ mode }: { mode: "login" | "register" }) {
   return (
     <div className="space-y-2">
-      <Button variant="outline" className="w-full flex items-center gap-2">
+      <Button variant="outline" className="w-full flex items-center gap-2"
+          onClick={() => signIn("google", { callbackUrl: "/" })} >
         {/* <FcGoogle size={20} /> */}
         {mode === "register" ? "Sign Up with Google" : "Login with Google"}
       </Button>

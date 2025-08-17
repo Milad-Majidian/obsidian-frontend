@@ -3,10 +3,13 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import HomePage from "@/features/home/Home";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 export default function Home() {
   const {logOut:signOut} = useAuth()
+   const {data:session, status} = useSession()
+
   return (
     <HomePage />
     // <main className="flex min-h-screen flex-col items-center justify-center p-24">
