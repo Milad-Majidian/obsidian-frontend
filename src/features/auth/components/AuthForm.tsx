@@ -16,13 +16,11 @@ import { useAuth } from "../hooks/useAuth";
 type Mode = "login" | "register";
 
 export function AuthForm({ mode }: { mode: Mode }) {
-    const { user, isAuthenticated, signInWithGoogle, logOut,signInWithEmail } = useAuth();
-
+  const {signInWithEmail } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
-   const {showError,showSuccess } = useToastMessage() 
-  
-   const {login, isLoading} = useLogin()
-
+  const {showError,showSuccess } = useToastMessage() 
+  const [isLoading, setIsLoading] = useState(false);
+  // const {login, isLoading} = useLogin()
   const form = useForm<RegisterSchema | LoginSchema>({
     resolver: zodResolver(mode === "register" ? registerSchema : loginSchema),
     defaultValues: mode === "register"
@@ -34,7 +32,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
     const { email, password } = values;
      if (mode === 'login') {
        try {
-         await signInWithEmail({ email, password });
+         await signInWithEmail(values);
          showSuccess("Logged in successfully!");
        } catch (error:any) {
          showError(error.message);
