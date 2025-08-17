@@ -2,10 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 export default function Home() {
   const {logOut:signOut} = useAuth()
+   const {data:session, status} = useSession()
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <ThemeToggle />
@@ -18,6 +21,12 @@ export default function Home() {
         <div className="bg-white text-black dark:bg-zinc-900 dark:text-white">
           Welcome!
         </div>
+      </div>
+      <div className="mt-6">
+        {status === "loading" && <p>Loading...</p>}
+        <Button onClick={() => signOut()}>
+            Sign Out
+        </Button> 
       </div>
     </main>
   );
