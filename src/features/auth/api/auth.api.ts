@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
-import { loginService } from '../services/auth-service';
-import { LoginRequest, LoginResponse } from '../types';
+import { RegisteredResponse, RegisterRequest } from '../types';
 import { useToastMessage } from '@/hooks/useToastMessage';
+import { registerService } from '../services/auth-service';
 
- export const useLoginMutation = () => {
+ export const useRegisterMutation = () => {
    const {showError,showSuccess } = useToastMessage() 
-   return useMutation<LoginResponse, Error, LoginRequest>({
-     mutationFn: loginService,
+   return useMutation<RegisteredResponse, Error, RegisterRequest>({
+     mutationFn: registerService,
      // Form-specific or mutation-specific errors 
       onError: (error: any) => {
       const message =
@@ -16,7 +16,7 @@ import { useToastMessage } from '@/hooks/useToastMessage';
         showError(message)
     },
      onSuccess: () =>{
-      showSuccess('Login successful');
+      showSuccess('Register successful');
      }
    });
  }

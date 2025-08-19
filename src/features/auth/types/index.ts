@@ -1,37 +1,29 @@
-export type Tokens = {
+ interface Tokens  {
     accessToken: string;
     refreshToken: string;
 }
 
-export type User = {
+ interface User  {
     id: string;
     email: string;
 }
 
-export type RegisteredUser = User & {
+// type RegisteredUser = User & {
+//     fullName: string;
+// }
+
+interface RegisteredUser extends User {
     fullName: string;
 }
 
-export type RegisteredResponse = {
+export interface RegisteredResponse {
     success: boolean;
     user: RegisteredUser;
     tokens: Tokens;
 }
 
-export type LoginResponse = {
-    success: boolean;
-    user: User;
-    tokens: Tokens;
-}
-
-export type RegisterRequest = {
+export interface RegisterRequest  {
     fullName: string;
     email: string;
     password: string;
 }
-
-export type LoginRequest = {
-    email: string;
-    password: string;
-}
-

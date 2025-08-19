@@ -29,7 +29,7 @@ const Input =  React.forwardRef<HTMLInputElement, InputProps>((
           id={inputId}
           name={name}
           ref={ref}
-          className={cn(error && "border-destructive", className)}
+          className={cn(error && "border-destructive","h-10", className)}
           aria-invalid={!!error}
           aria-describedby={error ? `${inputId}-error` : undefined}
           {...props}

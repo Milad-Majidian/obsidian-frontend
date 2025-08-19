@@ -1,7 +1,7 @@
-import { api } from "@/lib/axios";
-import { LoginRequest, LoginResponse } from "../types";
+ import { api } from "@/lib/axios";
+import { RegisteredResponse, RegisterRequest } from "../types";
 
-export const loginService = async (data:LoginRequest): Promise <LoginResponse> =>{
-    const response = await api.post('/auth/login',data)
+export const registerService = async (data:RegisterRequest): Promise <RegisteredResponse> =>{
+    const response = await api.post('/auth/register',data)
     return response.data
 }
