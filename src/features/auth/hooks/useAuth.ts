@@ -32,7 +32,6 @@ export function useAuth() {
       if(res.error === "CredentialsSignin") {
         message = "Invalid email or password"
       }
-      console.log('message:', message)
       throw new Error(message);
     }
      router.push("/")

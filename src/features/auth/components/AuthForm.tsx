@@ -6,21 +6,20 @@ import { Eye, EyeOff } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
 import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "../schemas/authSchema";
-import { useLogin } from "../hooks/useLogin";
-import { signIn } from "next-auth/react";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useAuth } from "../hooks/useAuth";
 import { Input } from "@/components/ui/elements/Input";
 import { Button } from "@/components/ui/elements/Button";
+import { useRegister } from "../hooks/useRegister";
 
 type Mode = "login" | "register";
 
 export function AuthForm({ mode }: { mode: Mode }) {
-  const {signInWithEmail } = useAuth();
+  const { signInWithEmail } = useAuth();
+  const { register: registerUser, isLoading } = useRegister();
   const [showPassword, setShowPassword] = useState(false);
   const {showError,showSuccess } = useToastMessage() 
-  const [isLoading, setIsLoading] = useState(false);
-  // const {login, isLoading} = useLogin()
+
   const form = useForm<RegisterSchema | LoginSchema>({
     resolver: zodResolver(mode === "register" ? registerSchema : loginSchema),
     defaultValues: mode === "register"
@@ -36,12 +35,11 @@ export function AuthForm({ mode }: { mode: Mode }) {
        } catch (error:any) {
          showError(error.message);
        }
-
+    } else if (mode === "register") {
+        registerUser(values);
     } else {
-      // Handle register here
+      return
     }
-
-
   };
 
   return (
