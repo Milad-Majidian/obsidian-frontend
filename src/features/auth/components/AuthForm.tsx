@@ -3,8 +3,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
 import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "../schemas/authSchema";
@@ -12,6 +10,8 @@ import { useLogin } from "../hooks/useLogin";
 import { signIn } from "next-auth/react";
 import { useToastMessage } from "@/hooks/useToastMessage";
 import { useAuth } from "../hooks/useAuth";
+import { Input } from "@/components/ui/elements/Input";
+import { Button } from "@/components/ui/elements/Button";
 
 type Mode = "login" | "register";
 
@@ -29,7 +29,6 @@ export function AuthForm({ mode }: { mode: Mode }) {
   });
 
   const onSubmit = async (values: any) => {
-    const { email, password } = values;
      if (mode === 'login') {
        try {
          await signInWithEmail(values);
@@ -104,7 +103,7 @@ export function AuthForm({ mode }: { mode: Mode }) {
           )}
         />
 
-        <Button className="w-full" type="submit" disabled={isLoading}>
+        <Button className="w-full cursor-pointer mt-6" type="submit" disabled={isLoading}>
           {isLoading ? "loading..." : mode === "register" ? "Create an Account" : "Login"}
         </Button>
       </form>

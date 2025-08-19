@@ -24,7 +24,9 @@ export default function Home() {
       </div>
       <div className="mt-6">
         {status === "loading" && <p>Loading...</p>}
-        <Button onClick={() => signOut()}>
+        <Button 
+         className="cursor-pointer"
+        onClick={() => signOut()}>
             Sign Out
         </Button> 
       </div>
