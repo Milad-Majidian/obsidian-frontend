@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import HomePage from "@/features/home/Home";
 import { useAuth } from "@/features/auth/hooks/useAuth";
-import HomePage from "@/features/home/Home";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 
