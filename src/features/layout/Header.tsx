@@ -22,7 +22,7 @@ export function Header() {
       animate={{ y: 0 }}
       transition={{ duration: 0.4 }}
       className={`fixed top-0 left-0 w-full z-50 transition-all ${
-        scrolled ? "bg-white shadow-lg" : "bg-transparent"
+        scrolled ? "bg-white shadow-lg text-black" : "bg-transparent text-white"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
