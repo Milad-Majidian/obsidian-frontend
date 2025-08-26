@@ -8,18 +8,18 @@ export const sliderImages: SliderImage[] = [
     alt: "Modern living room",
     productHotspot: [
       { id: 1, name: "Nordic Chair", price: "$250", x: 30, y: 40, link: "" },
-      { id: 2, name: "Minimal Table", price: "$180", x: 70, y: 60, link: "" },
+      { id: 2, name: "Minimal Table", price: "$180", x: 70, y: 40, link: "" },
     ],
   },
-  {
-    id: 2,
-    imageSrc: "/home/modern-furniture-4460.jpg",
-    alt: "Contemporary bedroom",
-    productHotspot: [
-      { id: 3, name: "Modern Lamp", price: "$120", x: 25, y: 35, link: "" },
-      { id: 4, name: "Designer Bed", price: "$850", x: 65, y: 50, link: "" },
-    ],
-  },
+  // {
+  //   id: 2,
+  //   imageSrc: "/home/modern-furniture-4460.jpg",
+  //   alt: "Contemporary bedroom",
+  //   productHotspot: [
+  //     { id: 3, name: "Modern Lamp", price: "$120", x: 25, y: 35, link: "" },
+  //     { id: 4, name: "Designer Bed", price: "$850", x: 65, y: 50, link: "" },
+  //   ],
+  // },
 ];
 
 

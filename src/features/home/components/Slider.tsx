@@ -11,12 +11,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ActiveProduct, SliderImage } from "../types";
 import { sliderImages } from "../data/slides";
-
+import { ProductHotspot } from "./ProductHotspot";
+import { ActiveHotspotPopover } from "./ActiveHotspotPopover";
 
 export function Slider() {
   const router = useRouter();
-  const [activeSpot, setActiveSpot] = useState<ActiveProduct | null>(null);
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [activeId, setActiveId] = useState<number | null>(null);
 
   return (
     <div className="relative w-full h-screen">
@@ -72,41 +72,32 @@ export function Slider() {
               </div>
               {/* Product hotspots */}
               {slide.productHotspot.map((hotspot) => (
-                <div
-                  key={hotspot.id}
-                  className="absolute"
-                  style={{ top: `${hotspot.y}%`, left: `${hotspot.x}%` }}
-                >
-                  <button
+                <div key={hotspot.id}>
+                  <ProductHotspot
+                    x={hotspot.x}
+                    y={hotspot.y}
+                    active={activeId === hotspot.id}
                     onClick={() =>
-                      setActiveSpot({ ...hotspot, slideId: hotspot.id })
+                      setActiveId(activeId === hotspot.id ? null : hotspot.id)
                     }
-                    className="w-6 h-6 rounded-full bg-white bg-opacity-80 hover:bg-opacity-100 flex items-center justify-center shadow-md transition-all hover:scale-110"
-                  >
-                    <div className="w-2 h-2 rounded-full bg-blue-600"></div>
-                  </button>
+                  />
+                  {activeId === hotspot.id && (
+                    <div
+                      className="absolute"
+                      style={{
+                        left: `${hotspot.x}%`,
+                        top: `${hotspot.y}%`,
+                        transform: "translate(-50%, -100%)",
+                      }}
+                    >
+                      <ActiveHotspotPopover>
+                        <span className="font-medium">{hotspot.name}</span>
+                        <span className="text-gray-200">{hotspot.price}</span>
+                      </ActiveHotspotPopover>
+                    </div>
+                  )}
                 </div>
               ))}
-              {activeSpot && (
-                <div
-                  style={{ top: `${activeSpot.y}%`, left: `${activeSpot.x}%` }}
-                  className="absolute z-20 -translate-x-1/2 -translate-y-full mt-2"
-                >
-                  <div className="bg-white rounded-xl shadow-xl p-4 w-64">
-                    <h3 className="font-semibold text-lg">
-                      {activeSpot.name}
-                    </h3>
-                    <p className="text-gray-600">{activeSpot.price}</p>
-                    <button
-                      onClick={() => router.push(activeSpot.link || "#")}
-                      className="mt-3 w-full rounded-lg bg-blue-600 text-white py-2 
-                   hover:bg-blue-700 transition"
-                    >
-                      View Product
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </SwiperSlide>
         ))}
