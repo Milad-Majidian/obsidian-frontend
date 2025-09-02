@@ -12,11 +12,10 @@ import { useRouter } from "next/navigation";
 import { ActiveProduct, SliderImage } from "../types";
 import { sliderImages } from "../data/slides";
 import { ProductHotspot } from "./ProductHotspot";
-import { ActiveHotspotPopover } from "./ActiveHotspotPopover";
+// import { ActiveHotspotPopover } from "./ActiveHotspotPopover";
 
 export function Slider() {
   const router = useRouter();
-  const [activeId, setActiveId] = useState<number | null>(null);
 
   return (
     <div className="relative w-full h-screen">
@@ -71,31 +70,63 @@ export function Slider() {
                 </div>
               </div>
               {/* Product hotspots */}
-              {slide.productHotspot.map((hotspot) => (
-                <div key={hotspot.id}>
-                  <ProductHotspot
-                    x={hotspot.x}
-                    y={hotspot.y}
+              {slide.productHotspot.map((productDetails) => (
+                <div key={productDetails.id}>
+                   <ProductHotspot
+                     productDetails={productDetails}
+                  />
+
+                  {/* <ProductHotspot
+                    x={productDetail.x}
+                    y={productDetail.y}
                     active={activeId === hotspot.id}
                     onClick={() =>
                       setActiveId(activeId === hotspot.id ? null : hotspot.id)
                     }
-                  />
-                  {activeId === hotspot.id && (
+                  /> */}
+
+                  {/* <HotspotWithPopover
+                    key={hotspot.id}
+                    hotspot={hotspot}
+                    open={activeId === hotspot.id}
+                    renderContent={(h) => (
+                      <div>
+                        <div className="font-semibold">{h.name}</div>
+                        <div className="text-sm text-gray-500">{h.price}</div>
+                      </div>
+                    )}
+                  /> */}
+                  {/* {activeId === hotspot.id && (
                     <div
                       className="absolute"
                       style={{
                         left: `${hotspot.x}%`,
                         top: `${hotspot.y}%`,
-                        transform: "translate(-50%, -100%)",
+                        transform: "translate(-50%, -175%)",
                       }}
                     >
                       <ActiveHotspotPopover>
                         <span className="font-medium">{hotspot.name}</span>
                         <span className="text-gray-200">{hotspot.price}</span>
                       </ActiveHotspotPopover>
+
                     </div>
-                  )}
+                  )} */}
+                  {/* <div
+                    className="absolute"
+                     style={{
+                        left: `${hotspot.x}%`,
+                        top: `${hotspot.y}%`,
+                       transform: "translate(-50%, -175%)",
+                     }}
+                  >
+                    <ActiveHotspotPopover open={activeId === hotspot.id}>
+                      <div>
+                        <h4 className="font-semibold">{hotspot.name}</h4>
+                        <p className="text-sm text-gray-400">{hotspot.price}</p>
+                      </div>
+                    </ActiveHotspotPopover>
+                  </div> */}
                 </div>
               ))}
             </div>
@@ -104,7 +135,7 @@ export function Slider() {
       </Swiper>
 
       {/* Black gradient overlay (top) */}
-      <div className="absolute top-0 left-0 w-full h-72 bg-gradient-to-b from-black/100 to-transparent z-40" />
+      {/* <div className="absolute top-0 left-0 w-full h-72 bg-gradient-to-b from-black/100 to-transparent z-40" /> */}
       {/* White gradient overlay (bottom) */}
       <div className="absolute bottom-0 left-0 w-full h-15 bg-gradient-to-t from-white via-white/95 to-transparent z-20" />
     </div>
