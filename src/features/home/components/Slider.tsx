@@ -7,15 +7,26 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ActiveProduct, SliderImage } from "../types";
 import { sliderImages } from "../data/slides";
-import { ProductHotspot } from "./ProductHotspot";
-// import { ActiveHotspotPopover } from "./ActiveHotspotPopover";
+import { HotspotPopover } from "./HotspotPopover";
 
 export function Slider() {
   const router = useRouter();
+
+  
+   const popoverContent = (productDetail: ActiveProduct) => {
+    return (
+      <div className="space-y-1">
+        <p className="font-medium">{productDetail.name}</p>
+        <p className="text-sm opacity-80">€ {productDetail.price} · In stock</p>
+        <button className="mt-2 px-3 py-1.5 rounded-lg bg-white/10 ring-1 ring-white/20 hover:bg-white/15">
+          View details
+        </button>
+      </div>
+    );
+   };
 
   return (
     <div className="relative w-full h-screen">
@@ -72,61 +83,11 @@ export function Slider() {
               {/* Product hotspots */}
               {slide.productHotspot.map((productDetails) => (
                 <div key={productDetails.id}>
-                   <ProductHotspot
-                     productDetails={productDetails}
-                  />
-
-                  {/* <ProductHotspot
-                    x={productDetail.x}
-                    y={productDetail.y}
-                    active={activeId === hotspot.id}
-                    onClick={() =>
-                      setActiveId(activeId === hotspot.id ? null : hotspot.id)
-                    }
-                  /> */}
-
-                  {/* <HotspotWithPopover
-                    key={hotspot.id}
-                    hotspot={hotspot}
-                    open={activeId === hotspot.id}
-                    renderContent={(h) => (
-                      <div>
-                        <div className="font-semibold">{h.name}</div>
-                        <div className="text-sm text-gray-500">{h.price}</div>
-                      </div>
-                    )}
-                  /> */}
-                  {/* {activeId === hotspot.id && (
-                    <div
-                      className="absolute"
-                      style={{
-                        left: `${hotspot.x}%`,
-                        top: `${hotspot.y}%`,
-                        transform: "translate(-50%, -175%)",
-                      }}
-                    >
-                      <ActiveHotspotPopover>
-                        <span className="font-medium">{hotspot.name}</span>
-                        <span className="text-gray-200">{hotspot.price}</span>
-                      </ActiveHotspotPopover>
-
-                    </div>
-                  )} */}
-                  {/* <div
-                    className="absolute"
-                     style={{
-                        left: `${hotspot.x}%`,
-                        top: `${hotspot.y}%`,
-                       transform: "translate(-50%, -175%)",
-                     }}
-                  >
-                    <ActiveHotspotPopover open={activeId === hotspot.id}>
-                      <div>
-                        <h4 className="font-semibold">{hotspot.name}</h4>
-                        <p className="text-sm text-gray-400">{hotspot.price}</p>
-                      </div>
-                    </ActiveHotspotPopover>
-                  </div> */}
+                  <HotspotPopover
+                        xPct={productDetails.x}
+                        yPct={productDetails.y}
+                        popoverContent={popoverContent({ ...productDetails, slideId: slide.id })}
+                      />
                 </div>
               ))}
             </div>
