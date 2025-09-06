@@ -17,6 +17,8 @@ type Theme = "glass-dark" | "glass-light" | "solid-dark";
 export type HotspotPopoverProps = {
   xPct: number; // 0..100
   yPct: number; // 0..100
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   popoverContent: React.ReactNode;
   theme?: Theme;
   ariaLabel?: string;
@@ -46,11 +48,13 @@ const THEME_VARS: Record< Theme, { bg: string; border: string; text: string; mar
 export function HotspotPopover({
   xPct,
   yPct,
+  open,
+  onOpenChange,
   popoverContent,
   theme = "glass-dark",
   ariaLabel = "Show details",
 }: HotspotPopoverProps) {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const arrowRef = useRef<HTMLDivElement | null>(null);
 
   // change this to control width and Height
@@ -62,7 +66,7 @@ export function HotspotPopover({
     useFloating({
       placement: "top",
       open,
-      onOpenChange: setOpen,
+      onOpenChange,
       whileElementsMounted: autoUpdate,
       middleware: [
         offset(10),
@@ -106,20 +110,20 @@ export function HotspotPopover({
         aria-expanded={open}
         onClick={(e) => {
           e.stopPropagation(); // avoid slider handling the click
-          setOpen((o) => !o);
+          onOpenChange(!open);
         }}
         onPointerDown={(e) => e.stopPropagation()}
         style={{ left: `${xPct}%`, top: `${yPct}%` }}
         className={cn(
-          "absolute -translate-x-1/2 -translate-y-1/2 w-7 h-7 rounded-full grid place-items-center cursor-pointer",
+          "absolute -translate-x-1/2 -translate-y-1/2 w-6 h-6 rounded-full grid place-items-center cursor-pointer",
           // marker visuals (glass base + ring + shadow so it reads on any background)
           "backdrop-blur-md bg-white/10 border border-white/15 shadow-[0_8px_20px_rgba(2,6,23,0.5)]",
-          "ring-2 ring-white/60 transition-transform duration-150 active:scale-95"
+          "group ring-2 ring-white/60"
         )}
       >
         {/* inner dot — keeps visible on bright/dark images */}
         <span
-          className="w-3 h-3 rounded-full"
+          className="w-3 h-3 rounded-full transition-transform duration-300 group-hover:scale-70"
           style={{
             background: vars.markerInner,
             boxShadow: "0 0 0 1px rgba(0,0,0,0.25)",

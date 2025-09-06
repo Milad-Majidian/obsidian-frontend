@@ -11,12 +11,13 @@ import { useRouter } from "next/navigation";
 import { ActiveProduct, SliderImage } from "../types";
 import { sliderImages } from "../data/slides";
 import { HotspotPopover } from "./HotspotPopover";
+import { useState } from "react";
 
 export function Slider() {
   const router = useRouter();
+  const [activeHotspotId, setActiveHotspotId] = useState<null | number>(null);
 
-  
-   const popoverContent = (productDetail: ActiveProduct) => {
+  const popoverContent = (productDetail: ActiveProduct) => {
     return (
       <div className="space-y-1">
         <p className="font-medium">{productDetail.name}</p>
@@ -26,7 +27,7 @@ export function Slider() {
         </button>
       </div>
     );
-   };
+  };
 
   return (
     <div className="relative w-full h-screen">
@@ -39,6 +40,7 @@ export function Slider() {
         pagination={{ clickable: true }}
         navigation
         className="h-full"
+        onSlideChange={() => setActiveHotspotId(null)} // Reset active hotspot on slide change
       >
         {/* {images.map((src, i) => ( */}
         {sliderImages.map((slide: SliderImage, index: number) => (
@@ -84,10 +86,17 @@ export function Slider() {
               {slide.productHotspot.map((productDetails) => (
                 <div key={productDetails.id}>
                   <HotspotPopover
-                        xPct={productDetails.x}
-                        yPct={productDetails.y}
-                        popoverContent={popoverContent({ ...productDetails, slideId: slide.id })}
-                      />
+                    xPct={productDetails.x}
+                    yPct={productDetails.y}
+                    popoverContent={popoverContent({
+                      ...productDetails,
+                      slideId: slide.id,
+                    })}
+                    open={activeHotspotId === productDetails.id}
+                    onOpenChange={(open:boolean) =>
+                      setActiveHotspotId(open ? productDetails.id : null)
+                    }
+                  />
                 </div>
               ))}
             </div>
