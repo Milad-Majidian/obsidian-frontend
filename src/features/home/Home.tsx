@@ -1,6 +1,7 @@
 
 import { Header } from "@/features/layout/Header";
 import { Slider } from "@/features/home/components/Slider";
+import HeroShowcase from "./components/HeroShowcase";
 
 export default function HomePage() {
   return (
@@ -8,8 +9,7 @@ export default function HomePage() {
       <Header />
       <Slider />
       <main className="max-w-7xl mx-auto py-16">
-        <h2 className="text-2xl font-bold">Welcome to our shop</h2>
-        {/* Other content */}
+            <HeroShowcase/>
       </main>
     </div>
   );
