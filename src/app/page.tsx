@@ -1,9 +1,17 @@
+'use client'
+import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { useAuth } from "@/features/auth/hooks/useAuth";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 export default function Home() {
+  const {logOut:signOut} = useAuth()
+   const {data:session, status} = useSession()
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
+      <ThemeToggle />
       <h1 className="text-4xl font-bold">Welcome to My App</h1>
       <p className="text-muted-foreground mt-4">
         Toggle between light and dark modes using the button below.
@@ -14,7 +22,14 @@ export default function Home() {
           Welcome!
         </div>
       </div>
-      <ThemeToggle />
+      <div className="mt-6">
+        {status === "loading" && <p>Loading...</p>}
+        <Button 
+         className="cursor-pointer"
+        onClick={() => signOut()}>
+            Sign Out
+        </Button> 
+      </div>
     </main>
   );
 }
