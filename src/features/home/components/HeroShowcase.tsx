@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import styles from "../styles/heroShowcase.module.scss";
+import LargeHero from "./LargeHero";
 
 const image = "/home/into-gallery-two.jpeg";
 const title = "Into a gallery of elegance";
@@ -12,6 +13,7 @@ export default function HeroShowcase() {
         {/* Left/Main Image */}
         <div className="relative md:col-span-3 w-full rounded-xl overflow-hidden flex items-center justify-center">
           {/* Left Big Card with Image */}
+          <LargeHero />
         </div>
         {/* Right Side */}
         <div className="md:col-span-1 w-full flex flex-col gap-4">

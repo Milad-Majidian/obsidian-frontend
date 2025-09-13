@@ -99,6 +99,8 @@
   --step-1: rgba(239,233,226,1); /* smallest */
   --step-2: rgba(250,248,246,1); /* mid */
   --step-3: rgba(255,255,255,1); /* top */
+  --clr-white: #fff;
+  --clr-black: #111;
 }
 
 .dark {
