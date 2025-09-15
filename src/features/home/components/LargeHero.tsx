@@ -1,5 +1,12 @@
 import Image from "next/image";
 import styles from "../styles/largeHero.module.scss";
+import { cn } from "@/lib/utils";
+import { Anton } from "next/font/google";
+
+const anton = Anton({
+  weight: "400",      // available Anton weight
+  subsets: ["latin"], // required
+});
 
 interface Props {
   image?: string;
@@ -31,25 +38,25 @@ export default function LargeHero({
           </div>
           <div className={styles.firstInverted}>
             <div 
-            className="border-1 border-gray-700 p-2 rounded-full text-xs font-medium"
+            className="border-1 border-gray-700 p-2 rounded-full text-sm font-medium"
               >
               {tagText}
             </div>
           </div>
-           {/* <div className={styles.secondInverted}>
-            <div 
-            className="text-5xl"
+           <div className={styles.secondInverted}>
+            <span 
+            className={cn(anton.className,"text-6xl uppercase")}
               >
               Modern
-            </div>
+            </span>
           </div>
            <div className={styles.thirdInverted}>
-            <div 
-            className="border-1 border-gray-700 px-4 py-2 rounded-full text-sm font-medium"
+            <span 
+            className="text-5xl"
               >
               Minimalist
-            </div>
-          </div> */}
+            </span>
+          </div>
         </div>
       </div>
     </div>

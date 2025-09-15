@@ -9,7 +9,7 @@ const title = "Into a gallery of elegance";
 export default function HeroShowcase() {
   return (
     <>
-      <section className="grid grid-cols-1 md:grid-cols-4 gap-6 min-h-[500px] md:min-h-[600px]">
+      <section className="grid grid-cols-1 md:grid-cols-4 gap-6 min-h-[500px]">
         {/* Left/Main Image */}
         <div className="relative md:col-span-3 w-full rounded-xl overflow-hidden flex items-center justify-center">
           {/* Left Big Card with Image */}
@@ -30,7 +30,7 @@ export default function HeroShowcase() {
               Into a gallery of elegance
             </h3>
           </div>
-          <div className="flex-3 flex-col rounded-xl overflow-hidden">
+          <div className="flex-3 flex-col overflow-hidden">
             <div
               className={styles.cardInner}
               style={{ ["--clr" as any]: "#ffff" }}
