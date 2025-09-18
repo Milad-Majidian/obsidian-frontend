@@ -11,11 +11,10 @@ interface ProductDetailsProps {
   y: number;
 }
 
-interface ProductHotspotProps {
+interface PopoverGlassmorphismProps {
   productDetails:ProductDetailsProps
 }
-
-export const ProductHotspot: React.FC<ProductHotspotProps> = ({ productDetails }) => {
+export const PopoverGlassmorphism: React.FC<PopoverGlassmorphismProps> = ({ productDetails }) => {
    return (
     <div
       className="absolute"

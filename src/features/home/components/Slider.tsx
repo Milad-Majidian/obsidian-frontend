@@ -30,7 +30,7 @@ export function Slider() {
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <section className="relative w-full h-screen">
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         slidesPerView={1}
@@ -108,6 +108,6 @@ export function Slider() {
       {/* <div className="absolute top-0 left-0 w-full h-72 bg-gradient-to-b from-black/100 to-transparent z-40" /> */}
       {/* White gradient overlay (bottom) */}
       <div className="absolute bottom-0 left-0 w-full h-15 bg-gradient-to-t from-white via-white/95 to-transparent z-20" />
-    </div>
+    </section>
   );
 }
