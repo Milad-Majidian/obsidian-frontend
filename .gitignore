@@ -13,6 +13,7 @@
 # large images
 /public/auth
 /public/home 
+/public/categories
 
 # Output directories
 dist/
