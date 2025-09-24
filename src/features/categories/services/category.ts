@@ -1,19 +1,30 @@
 import { api } from "@/lib/axios";
-import { Category } from "../types";
-import { ConeIcon } from "lucide-react";
+import { Category, CategoryProductsResponse, ProductQuery } from "../types";
 
-// export const getCategories = async (): Promise<Category[]> => {
-//     const response = await api.get('/categories');
-//     return response.data.data;
-// }
-
-export const getCategoryByName = async (slug: string): Promise<Category> => {
-        
-    const response = await api.get(`/products?category=${slug}`);
-    return response.data.data;
-}
-
-// export const createCategory = async (data: Partial<Category>): Promise<Category> => {
-//     const response = await api.post('/categories', data);
-//     return response.data;
-// }
+export const getCategoryProducts = async ({
+  slug,
+  page = 1,
+  limit = 10,
+  sortBy = "createdAt",
+  order = "desc",
+  brand,
+  minPrice,
+  maxPrice,
+  rating,
+  inStock,
+}: ProductQuery): Promise<CategoryProductsResponse> => {
+    console.log('slug',slug)
+    const params = new URLSearchParams()
+    params.append('page', page.toString())
+    params.append('limit', limit.toString())
+    params.append('sortBy', sortBy)
+    params.append('order', order)
+    if(brand) params.append('brand', brand)
+    if(minPrice) params.append('minPrice', minPrice.toString())
+    if(maxPrice) params.append('maxPrice', maxPrice.toString())
+    if(rating) params.append('rating', rating.toString())
+    if(inStock !== undefined) params.append('inStock', inStock.toString())
+    const response = await api.get(`/products?category=${slug}&${params.toString()}`)
+    return response.data 
+    // as CategoryProductsResponse
+};

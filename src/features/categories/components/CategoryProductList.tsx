@@ -4,6 +4,7 @@ import { useState } from "react";
 import SortBar from "./SortBar";
 import FilterSidebar from "./FilterSidebar";
 import { Category } from "../types";
+import { Product } from "@/features/products/types";
 
 const imageUrl = "/categories/banner.jpg";
 const title = "All Furniture";
@@ -13,12 +14,15 @@ type CategoriesListProps = {
     categories: Category[];
 };
 
+interface CategoryProductListProps {
+  products: Product[];
+}
 
-export default function CategoriesList({categories}:CategoriesListProps) {
+export default function CategoryProductList({products}:CategoryProductListProps) {
     const [category, setCategory] = useState("All");
     const [sort, setSort] = useState("date_desc");
     const [search, setSearch] = useState("");
-    const [products, setProducts] = useState([]);
+    // const [products, setProducts] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -50,7 +54,7 @@ export default function CategoriesList({categories}:CategoriesListProps) {
         setHasMore(true);
         // fetchProducts({ category: "All", sort: "date_desc", search: "", page: 1 });
     }
-
+       console.log('product',products)
   return (
     <div className="container mx-auto p-4 md:p-6">
       <div className="w-full rounded-2xl overflow-hidden relative bg-gray-100">
@@ -98,19 +102,19 @@ export default function CategoriesList({categories}:CategoriesListProps) {
             <div className="mt-6">
               <>
                 <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                  {categories.map((category) => (
+                  {products.map((product) => (
                     <li
-                      key={category.id}
+                      key={product._id}
                       className="border rounded-lg shadow-sm p-4 hover:shadow-md transition"
                     >
                       <img
-                        src={category.image}
-                        alt={category.name}
+                        src={product.image || '/categories/product-placeholder.png'}
+                        alt={product.name}
                         className="w-full h-40 object-cover rounded"
                       />
-                      <h2 className="mt-2 font-semibold">{category.name}</h2>
+                      <h2 className="mt-2 font-semibold">{product.name}</h2>
                       <p className="text-sm text-gray-600">
-                        {category.description}
+                        {product.description}
                       </p>
                     </li>
                   ))}
