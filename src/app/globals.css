@@ -41,6 +41,26 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Brand */
+  --color-brand: #efe9e2;
+  --color-brand-light: #3b82f6;
+  --color-brand-dark: #1e3a8a;
+
+  /* Background */
+  --color-surface: #ffffff;
+  --color-surface-light: #faf8f6;
+  --color-surface-dark: #efe9e2;
+
+  /* Buttons */
+  --color-button: var(--color-brand);
+  --color-button-hover: var(--color-brand-dark);
+  --color-button-text: #ffffff;
+
+  /* Text */
+  --color-text: #111827;
+  --color-text-light: #374151;
+  --color-text-dark: #000000;
 }
 
 :root {
@@ -76,6 +96,11 @@
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  --step-1: rgba(239,233,226,1); /* smallest */
+  --step-2: rgba(250,248,246,1); /* mid */
+  --step-3: rgba(255,255,255,1); /* top */
+  --clr-white: #fff;
+  --clr-black: #111;
 }
 
 .dark {
@@ -110,6 +135,31 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+
+   /* Brand */
+  --color-brand: #3b82f6;
+  --color-brand-light: #60a5fa;
+  --color-brand-dark: #1e3a8a;
+
+  /* Background */
+  /* --color-bg: #efe9e2;
+  --color-bg-light: #faf8f6;
+  --color-bg-dark: #c2bdb7; */
+
+  /* Background system */
+  --color-surface: #ffffff;        /* main body */
+  --color-surface-light: #faf8f6;  /* section background */
+  --color-surface-dark: #efe9e2; 
+
+  /* Buttons */
+  --color-button: var(--color-brand);
+  --color-button-hover: var(--color-brand-light);
+  --color-button-text: #f9fafb;
+
+  /* Text */
+  --color-text: #f9fafb;
+  --color-text-light: #e5e7eb;
+  --color-text-dark: #ffffff;
 }
 
 @layer base {
@@ -119,4 +169,28 @@
   body {
     @apply bg-background text-foreground;
   }
+  h3 {
+    @apply text-xl font-semibold text-primary mb-2 tracking-tight;
+  }
 }
+
+@layer components {
+  /* reusable component class */
+  .btn{
+    @apply px-4 py-2 rounded-md font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 bg-button text-button-text hover:bg-button-hover;
+  }
+}
+
+@utility bg-surface {
+  background-color: var(--color-surface);
+}
+
+@utility bg-surface-light {
+  background-color: var(--color-surface-light);
+}
+
+@utility bg-surface-dark {
+  background-color: var(--color-surface-dark);
+}
+
+
