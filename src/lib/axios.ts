@@ -1,4 +1,5 @@
 import axios from "axios";
+import { normalizeApiError } from "./apiError";
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -38,13 +39,6 @@ api.interceptors.response.use(
     if (status === 403) {
       // Forbidden - insufficient permissions
     }
-    if (status === 404) {
-      // Not Found - resource does not exist
-    }
-    if (status === 500) {
-      // Internal server error
-    }
-
-    return Promise.reject(error); // Pass the error to React Query or other handlers
+    return Promise.reject(normalizeApiError(error));
   }
 );

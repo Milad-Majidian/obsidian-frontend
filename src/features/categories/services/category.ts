@@ -13,7 +13,6 @@ export const getCategoryProducts = async ({
   rating,
   inStock,
 }: ProductQuery): Promise<CategoryProductsResponse> => {
-    console.log('slug',slug)
     const params = new URLSearchParams()
     params.append('page', page.toString())
     params.append('limit', limit.toString())
@@ -26,5 +25,4 @@ export const getCategoryProducts = async ({
     if(inStock !== undefined) params.append('inStock', inStock.toString())
     const response = await api.get(`/products?category=${slug}&${params.toString()}`)
     return response.data 
-    // as CategoryProductsResponse
 };

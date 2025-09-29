@@ -5,6 +5,10 @@ import SortBar from "./SortBar";
 import FilterSidebar from "./FilterSidebar";
 import { Category } from "../types";
 import { Product } from "@/features/products/types";
+import { useCategoryProducts } from "../hooks/useCategoryProducts";
+import { is } from "zod/v4/locales";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/elements/Button";
 
 const imageUrl = "/categories/banner.jpg";
 const title = "All Furniture";
@@ -18,43 +22,29 @@ interface CategoryProductListProps {
   products: Product[];
 }
 
-export default function CategoryProductList({products}:CategoryProductListProps) {
-    const [category, setCategory] = useState("All");
-    const [sort, setSort] = useState("date_desc");
-    const [search, setSearch] = useState("");
-    // const [products, setProducts] = useState([]);
-    const [page, setPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
+export default function CategoryProductList({slug}: {slug:string}) {
+    const { data, isLoading, isError, error, refetch } = useCategoryProducts(slug)
+    const products = data?.data || [];   
 
-    // Handlers
-    const onSelectCategory = (c: string) => {
-        setCategory(c);
-        setPage(1);
-        setHasMore(true);
-        // fetchProducts({ category: c, sort, search, page: 1 });
-    };
-    const onChangeSort = (s: string) => {
-        setSort(s);
-        setPage(1);
-        setHasMore(true);
-        // fetchProducts({ category, sort: s, search, page: 1 });
-    }
-    const onSearchChange = (q: string) => {
-        setSearch(q);
-        setPage(1);
-        setHasMore(true);
-        // fetchProducts({ category, sort, search: q, page: 1 });
-    }
-    const onReset = () => {
-        setCategory("All");
-        setSort("date_desc");
-        setSearch("");
-        setPage(1);
-        setHasMore(true);
-        // fetchProducts({ category: "All", sort: "date_desc", search: "", page: 1 });
-    }
-       console.log('product',products)
+    if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <Skeleton key={i} className="h-48 w-full rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+   if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <p className="text-red-600">{(error as any).message}</p>
+        <Button onClick={() => refetch()}>Try Again</Button>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-4 md:p-6">
       <div className="w-full rounded-2xl overflow-hidden relative bg-gray-100">
@@ -79,11 +69,11 @@ export default function CategoryProductList({products}:CategoryProductListProps)
 
       <div className="mt-6 space-y-6">
         <div className="flex flex-col md:flex-row gap-6">
-          <FilterSidebar
+          {/* <FilterSidebar
             selected={category}
             onSelect={onSelectCategory}
             onReset={onReset}
-          />
+          /> */}
 
           <section className="flex-1">
             <div className="flex items-center justify-between">
@@ -91,11 +81,11 @@ export default function CategoryProductList({products}:CategoryProductListProps)
                 Showing {products.length} results
               </div>
               <div className="flex items-center gap-3">
-                <SortBar
+                {/* <SortBar
                   sort={sort}
                   onChange={onChangeSort}
                   onSearch={onSearchChange}
-                />
+                /> */}
               </div>
             </div>
 
@@ -119,36 +109,11 @@ export default function CategoryProductList({products}:CategoryProductListProps)
                     </li>
                   ))}
                 </ul>
-
-                {/* <div className="mt-6 flex justify-center">
-                  {loading ? (
-                    <Button disabled>
-                      <Loader2 className="animate-spin mr-2" size={16} />{" "}
-                      Loading
-                    </Button>
-                  ) : hasMore ? (
-                    <Button onClick={loadMore}>Load more</Button>
-                  ) : (
-                    <div className="text-sm text-muted">No more results</div>
-                  )}
-                </div> */}
               </>
             </div>
           </section>
         </div>
       </div>
-
-      {/* Helpful notes for integration (comments inside the same file) */}
-      {/*
-Integration Checklist:
-1) Replace fetchProductsServer with real API calls (/api/products) or server-action + caching.
-2) Move big UI pieces (FilterSidebar, ProductCard, SortBar, TopBanner) to separate files under features/categories/
-3) For RTL support: set <html dir="rtl"> on server render for RTL locales and adjust Tailwind config with the rtl plugin or use "flex-row-reverse" conditionally.
-4) Use React Query or SWR for caching, background revalidation and better UX. This example keeps state local for clarity.
-5) Add accessibility: focus styles for keyboard nav, aria-live for dynamic results, and descriptive alt text for product images.
-6) Add proper image sizes and next/image optimization via loader if using external CDN.
-7) Add unit tests for FilterSidebar and ProductCard using React Testing Library and an e2e test for the page (Playwright).
-*/}
     </div>
   );
 }
