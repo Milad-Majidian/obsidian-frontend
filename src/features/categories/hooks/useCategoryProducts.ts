@@ -12,19 +12,25 @@ import { useSearchParams } from "next/navigation";
 
 export const useCategoryProducts = (slug: string, page: number = 1) => {
   const searchParams = useSearchParams();
+  
+  const brand =  searchParams.get("brand") || undefined;
+  const minPrice = searchParams.get("minPrice")
+    ? Number(searchParams.get("minPrice"))
+    : undefined;
+  const maxPrice = searchParams.get("maxPrice")
+    ? Number(searchParams.get("maxPrice"))
+    : undefined;
+  const inStock = searchParams.get("inStock") === "true";
+  // Fetch products with filters from URL and pagination 
   return useQuery({
     queryKey: ["categoryProducts", slug, searchParams.toString()],
     queryFn: () =>
       getCategoryProducts({
         slug,
-        brand: searchParams.get("brand") || undefined,
-        minPrice: searchParams.get("minPrice")
-          ? Number(searchParams.get("minPrice"))
-          : undefined,
-        maxPrice: searchParams.get("maxPrice")
-          ? Number(searchParams.get("maxPrice"))
-          : undefined,
-        inStock: searchParams.get("inStock") === "true",
+        brand: brand,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
+        inStock: inStock,
         page,
       }), // Fetch products for the given category slug
     retry: 2, // retry twice if network error

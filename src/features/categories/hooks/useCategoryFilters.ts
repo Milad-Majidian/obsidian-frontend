@@ -22,6 +22,7 @@ import { usePathname, useRouter,useSearchParams } from "next/navigation";
 
 export function useCategoryFilters(){
     const searchParams = useSearchParams();
+    const searchParamsString = searchParams.toString();
     const pathname = usePathname()
     const router = useRouter();
     const category = searchParams.get("category") || "All";
@@ -35,14 +36,15 @@ export function useCategoryFilters(){
     };
 
     const setFilter = (key: string, value: string | null) => {
-        const params = new URLSearchParams(searchParams.toString());
+        const params = new URLSearchParams(searchParamsString);
         if (value) {
             params.set(key, value);
             }
         else {
             params.delete(key);
         }
-        router.push(`${pathname}?${params.toString()}`); 
+        
+        router.replace(`${pathname}?${params.toString()}`); 
     }
 
     return {

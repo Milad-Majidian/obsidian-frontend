@@ -4,7 +4,7 @@ import { useCategoryFilters } from "../hooks/useCategoryFilters";
 import { Separator } from "@radix-ui/react-select";
 
 export default function CategoryFilter() {
-  const {brand,minPrice,maxPrice,inStock, setFilter} = useCategoryFilters();
+  const {brand, minPrice, maxPrice, inStock, setFilter} = useCategoryFilters();
   return (
       <div className="sticky top-6 space-y-4">
         {/* Brand */}
