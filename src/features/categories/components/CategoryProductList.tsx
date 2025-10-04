@@ -8,8 +8,8 @@ import { useCategoryProducts } from "../hooks/useCategoryProducts";
 import { is } from "zod/v4/locales";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/elements/Button";
-import { useResponsive } from "@/hooks/useMediaQuery";
 import CategoryFilter from "./CategoryFilter";
+import { useResponsive } from "@/shared/hooks/useMediaQuery";
 
 const imageUrl = "/categories/banner.jpg";
 const title = "All Furniture";

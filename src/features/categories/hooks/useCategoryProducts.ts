@@ -33,6 +33,8 @@ export const useCategoryProducts = (slug: string, page: number = 1) => {
         inStock: inStock,
         page,
       }), // Fetch products for the given category slug
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,  
     retry: 2, // retry twice if network error
     staleTime: 1000 * 60, // cache for 1 min
   });
