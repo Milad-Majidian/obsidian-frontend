@@ -1,16 +1,17 @@
 import { Product } from "@/features/products/types";
 
-export interface ProductQuery {
+export interface FilterParams {
+  brand?: string | null;
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  inStock?: boolean;
+  sortBy?: string;
+  order?: string;
+  page?: number;
+}
+
+export interface ProductQuery extends FilterParams {
     slug: string;
-    page?: number;
-    limit?: number;
-    sortBy?: string;
-    order?: 'asc' | 'desc';
-    brand?: string;
-    minPrice?: number;
-    maxPrice?: number;
-    rating?: number;
-    inStock?: boolean;
 }
 export interface Category {
     id: string;

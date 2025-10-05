@@ -1,23 +1,15 @@
 import { usePathname, useRouter,useSearchParams } from "next/navigation";
 
 /**
- * useCategoryFilters - Manages the state and logic for product category filters.
+ * useCategoryFilters - A custom hook to manage category filters using URL search parameters.
  *
- * Responsibilities:
- * - Keeps track of selected filters (brand, price range, stock availability).
- * - Syncs filter state with the URL query params.
- * - Provides callbacks to update or reset filters.
+ * @returns {object} - An object containing current filter values and functions to set and reset filters.
+ * - filters: Current filter values (brand, minPrice, maxPrice, inStock, sortBy, order, page).
+ * - setFilter: Function to update a specific filter and modify the URL accordingly.
+ * - resetFilters: Function to clear all filters and reset the URL to the base category path.
  *
- * Returns:
- * - filters: Current filter values
- * - setFilter: Function to update a specific filter
- * - resetFilters: Function to reset all filters
- *
- * Example:
- * const { filters, setFilter, resetFilters } = useCategoryFilters();
- *
- * setFilter("brand", "Apple");
- * setFilter("minPrice", 1000);
+ * This hook reads filter values from the URL's search parameters, allowing for easy sharing and bookmarking of filtered views.
+ * It also provides functions to update these parameters, which in turn updates the displayed products based on the selected filters.
  */
 
 export function useCategoryFilters(){
@@ -25,38 +17,41 @@ export function useCategoryFilters(){
     const searchParamsString = searchParams.toString();
     const pathname = usePathname()
     const router = useRouter();
-    const category = searchParams.get("category") || "All";
+    
+    const filters = {
+        brand : searchParams.get('brand') || undefined,
+        minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
+        maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
+        inStock: searchParams.get('inStock') === 'true' ? true : searchParams.get('inStock') ==='false' ? false : undefined,
+        sortBy: searchParams.get('sortBy') || undefined,
+        order: searchParams.get('order') || undefined,
+        page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+    }
 
-    const onSelectCategory = (cat: string) => {
-        setFilter("category", cat === "All" ? null : cat);
-    };
-
-    const onReset = () => {
-        router.push(pathname); // Navigate to the base path without any query parameters
-    };
-
-    const setFilter = (key: string, value: string | null) => {
+    const setFilter = (key: string, value: string | number | boolean | undefined) => {
         const params = new URLSearchParams(searchParamsString);
-        if (value) {
-            params.set(key, value);
-            }
-        else {
+        if(value === undefined || value === null || value === ''){
             params.delete(key);
+        } else {
+            params.set(key, value.toString());
         }
-        
-        router.replace(`${pathname}?${params.toString()}`); 
+        // Reset to first page when filters change
+        if(key !== 'page'){
+            params.delete('page');
+        }
+        const queryString = params.toString();
+        const url = queryString ? `${pathname}?${queryString}` : pathname;
+        router.push(url);
+    }
+
+    const resetFilters = () => {
+        router.push(pathname);
     }
 
     return {
-        brand: searchParams.get("brand") || null,
-        maxPrice: searchParams.get("maxPrice") || null,
-        minPrice: searchParams.get("minPrice") || null,
-        inStock: searchParams.get("inStock"),
-        sortBy: searchParams.get("sortBy") || "createdAt",
-        order: searchParams.get("order") || "desc",
-        category,
-        onSelectCategory,
-        onReset,
-        setFilter
-    }
+        filters,
+        setFilter,
+        resetFilters,
+    };
+
 }

@@ -1,30 +1,26 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
-import SortBar from "./SortBar";
-import { Category } from "../types";
-import { Product } from "@/features/products/types";
+import { CategoryProductsResponse } from "../types";
 import { useCategoryProducts } from "../hooks/useCategoryProducts";
-import { is } from "zod/v4/locales";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/elements/Button";
 import CategoryFilter from "./CategoryFilter";
 import { useResponsive } from "@/shared/hooks/useMediaQuery";
+import { useCategoryFilters } from "../hooks/useCategoryFilters";
 
 const imageUrl = "/categories/banner.jpg";
 const title = "All Furniture";
 
-type CategoriesListProps = {
-  categories: Category[];
-};
-
 interface CategoryProductListProps {
-  products: Product[];
+  slug: string;
+  initialData: CategoryProductsResponse;
 }
 
-export default function CategoryProductList({ slug }: { slug: string }) {
-  const { data, isLoading, isError, error, refetch } =
-    useCategoryProducts(slug);
+
+export default function CategoryProductList({ slug, initialData }: CategoryProductListProps) {
+ const { filters } = useCategoryFilters();
+  const { data, isLoading, isError, error, refetch, isFetching } =
+    useCategoryProducts(slug, initialData, filters);
   const products = data?.data || [];
 
   const { isMobile, isDesktop } = useResponsive();
@@ -79,11 +75,12 @@ export default function CategoryProductList({ slug }: { slug: string }) {
           </h1>
         </div>
       </div>
-
+              {/* {isFetching && <p className="text-sm text-muted">Updating results...</p>} */}
+ 
       <div className="mt-6 space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
           {isDesktop && (
-              <aside className="md:col-span-1">
+            <aside className="md:col-span-1">
             <CategoryFilter />
           </aside>
           ) }

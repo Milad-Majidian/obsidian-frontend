@@ -4,14 +4,14 @@ import { useCategoryFilters } from "../hooks/useCategoryFilters";
 import { Separator } from "@radix-ui/react-select";
 
 export default function CategoryFilter() {
-  const {brand, minPrice, maxPrice, inStock, setFilter} = useCategoryFilters();
+  const { filters, setFilter } = useCategoryFilters();
   return (
       <div className="sticky top-6 space-y-4">
         {/* Brand */}
       <div className="space-y-2">
         <label className="font-semibold">Brand</label>
         <Input
-          value={brand || ""}
+          value={filters.brand || ""}
           placeholder="e.g. Apple"
           onChange={(e) => setFilter("brand", e.target.value)}
         />
@@ -24,13 +24,13 @@ export default function CategoryFilter() {
           <Input
             type="number"
             placeholder="Min"
-            value={minPrice || ""}
+            value={filters.minPrice || ""}
             onChange={(e) => setFilter("minPrice", e.target.value)}
           />
           <Input
             type="number"
             placeholder="Max"
-            value={maxPrice || ""}
+            value={filters.maxPrice || ""}
             onChange={(e) => setFilter("maxPrice", e.target.value)}
           />
         </div>
@@ -39,9 +39,9 @@ export default function CategoryFilter() {
       {/* Stock */}
       <div className="flex items-center gap-2">
         <Checkbox
-          checked={inStock === "true"}
+          checked={filters.inStock}
           onCheckedChange={(checked) =>
-            setFilter("inStock", checked ? "true" : null)
+            setFilter("inStock", checked)
           }
         />
         <span>In Stock Only</span>

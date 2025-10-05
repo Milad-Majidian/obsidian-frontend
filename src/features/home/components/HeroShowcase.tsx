@@ -2,7 +2,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import styles from "../styles/heroShowcase.module.scss";
 import LargeHero from "./HeroCard";
-import { useResponsive } from "@/hooks/useMediaQuery";
+import { useResponsive } from "@/shared/hooks/useMediaQuery";
 
 const modernInterior = "/home/modern-interior.jpeg";
 const mahoganyDesk = "/home/mahogany-desk.jpeg";

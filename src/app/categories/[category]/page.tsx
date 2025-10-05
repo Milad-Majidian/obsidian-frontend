@@ -1,11 +1,10 @@
-import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
-import getQueryClient  from "@/lib/getQueryClient"
 import CategoryProductList from "@/features/categories/components/CategoryProductList";
-import { getCategoryProducts } from "@/features/categories/services/category";
 import { Metadata } from "next";
+import { getCategoryProductsServer } from "@/features/categories/services/category.server";
 
 interface Props {
-  params: Promise<{ category: string }>;
+  params: { category: string};
+  searchParams: Record<string, string | string[] | undefined>;
 }
 
 export async function generateMetadata({params}: Props): Promise<Metadata>{
@@ -25,18 +24,19 @@ export async function generateMetadata({params}: Props): Promise<Metadata>{
   };
 }
 
-export default async function CategoriesPage({params}: Props) {
+export default async function CategoriesPage({params, searchParams}: Props) {
   const {category} = await params;
-  const queryClient = getQueryClient();
-
-  await queryClient.prefetchQuery({
-    queryKey: ["categoryProducts",category,1],
-    queryFn: () => getCategoryProducts({slug:category})
-  })
+  const initialFilters = {
+    brand : searchParams.brand as string | undefined,
+    minPrice: searchParams.minPrice ? Number(searchParams.minPrice) : undefined,
+    maxPrice: searchParams.maxPrice ? Number(searchParams.maxPrice) : undefined,
+    inStock: searchParams.inStock === 'true' ? true : searchParams.inStock ==='false' ? false : undefined,
+    sortBy: searchParams.sortBy as string | undefined,
+    page: searchParams.page ? Number(searchParams.page) : 1,
+  }
+  const data = await getCategoryProductsServer({ slug: category, ...initialFilters });
 
   return (
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <CategoryProductList slug={category} />
-      </HydrationBoundary>
+      <CategoryProductList  slug={category} initialData={data} />
   );
 }
