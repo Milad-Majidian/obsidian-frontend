@@ -1,13 +1,14 @@
 import CategoryProductList from "@/features/categories/components/CategoryProductList";
 import { Metadata } from "next";
 import { getCategoryProductsServer } from "@/features/categories/services/category.server";
+import { parseCategoryFilters } from "@/features/categories/utils/parseCategoryFilters";
 
 interface Props {
-  params: { category: string};
-  searchParams: Record<string, string | string[] | undefined>;
+  params: Promise<{ category: string}>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export async function generateMetadata({params}: Props): Promise<Metadata>{
+export async function generateMetadata({params}: { params: Promise<{ category: string }> }): Promise<Metadata>{
     const { category } = await params;
   const title = `${category} - Buy Online | MyFurnitureStore`;
   const description = `Explore the best ${category} products at MyFurnitureStore. High quality, affordable prices, and fast delivery.`;
@@ -25,16 +26,27 @@ export async function generateMetadata({params}: Props): Promise<Metadata>{
 }
 
 export default async function CategoriesPage({params, searchParams}: Props) {
-  const {category} = await params;
-  const initialFilters = {
-    brand : searchParams.brand as string | undefined,
-    minPrice: searchParams.minPrice ? Number(searchParams.minPrice) : undefined,
-    maxPrice: searchParams.maxPrice ? Number(searchParams.maxPrice) : undefined,
-    inStock: searchParams.inStock === 'true' ? true : searchParams.inStock ==='false' ? false : undefined,
-    sortBy: searchParams.sortBy as string | undefined,
-    page: searchParams.page ? Number(searchParams.page) : 1,
-  }
-  const data = await getCategoryProductsServer({ slug: category, ...initialFilters });
+    // Await searchParams if needed
+  const { category }  = await params;
+  const query = await searchParams;
+
+  // const initialFilters = {
+  //   brand: typeof query.brand === "string" ? query.brand : undefined,
+  //   minPrice: query.minPrice ? Number(query.minPrice) : undefined,
+  //   maxPrice: query.maxPrice ? Number(query.maxPrice) : undefined,
+  //   inStock:
+  //     query.inStock === "true"
+  //       ? true
+  //       : query.inStock === "false"
+  //       ? false
+  //       : undefined,
+  //   sortBy: typeof query.sortBy === "string" ? query.sortBy : undefined,
+  //   order: query.order === "asc" || query.order === "desc" ? query.order : "desc",
+  //   page: query.page ? Number(query.page) : 1,
+  // };
+  const filters = parseCategoryFilters(await searchParams);
+
+  const data = await getCategoryProductsServer({ slug: category, ...filters });
 
   return (
       <CategoryProductList  slug={category} initialData={data} />
