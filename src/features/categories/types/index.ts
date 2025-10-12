@@ -1,5 +1,14 @@
 import { Product } from "@/features/products/types";
 
+
+export interface Brand {
+    _id: string;
+    name: string;
+    description?: string;
+    image :string;
+    createdAt: Date;
+    updatedAt: Date;
+}
 export interface FilterParams {
   brand?: string | null;
   minPrice?: number | null;
@@ -9,7 +18,6 @@ export interface FilterParams {
   order?: string;
   page?: number;
 }
-
 export interface ProductQuery extends FilterParams {
     slug: string;
 }

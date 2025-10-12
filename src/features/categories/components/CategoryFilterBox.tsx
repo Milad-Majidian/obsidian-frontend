@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import { useCategoryFilters } from "../hooks/useCategoryFilters";
 import { Separator } from "@radix-ui/react-select";
 
-export default function CategoryFilter() {
+export default function CategoryFilterBox() {
   const { filters, setFilter } = useCategoryFilters();
   return (
       <div className="sticky top-6 space-y-4">
@@ -22,13 +22,13 @@ export default function CategoryFilter() {
         <label className="font-semibold">Price</label>
         <div className="flex flex-col gap-2">
           <Input
-            type="number"
+            type="text"
             placeholder="Min"
             value={filters.minPrice || ""}
             onChange={(e) => setFilter("minPrice", e.target.value)}
           />
           <Input
-            type="number"
+            type="text"
             placeholder="Max"
             value={filters.maxPrice || ""}
             onChange={(e) => setFilter("maxPrice", e.target.value)}

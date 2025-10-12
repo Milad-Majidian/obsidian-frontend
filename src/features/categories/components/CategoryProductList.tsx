@@ -1,107 +1,10 @@
-"use client";
-import Image from "next/image";
-import { CategoryProductsResponse } from "../types";
-import { useCategoryProducts } from "../hooks/useCategoryProducts";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/elements/Button";
-import CategoryFilter from "./CategoryFilter";
-import { useResponsive } from "@/shared/hooks/useMediaQuery";
-import { useCategoryFilters } from "../hooks/useCategoryFilters";
 
-const imageUrl = "/categories/banner.jpg";
-const title = "All Furniture";
-
-interface CategoryProductListProps {
-  slug: string;
-  initialData: CategoryProductsResponse;
-}
-
-
-export default function CategoryProductList({ slug, initialData }: CategoryProductListProps) {
- const { filters } = useCategoryFilters();
-  const { data, isLoading, isError, error, refetch, isFetching } =
-    useCategoryProducts(slug, initialData, filters);
-  const products = data?.data || [];
-
-  const { isMobile, isDesktop } = useResponsive();
-
-  if (isLoading) {
+export function CategoryProductList({ products }:any) {
     return (
-      <div className="container mx-auto p-4 md:p-6">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-          <div className="col-span-1">
-            <Skeleton className="h-84 w-full rounded-lg" />
-          </div>
-          <div className={isDesktop ? "md:col-span-5 space-y-4" : "col-span-6"}>
-            <ul className="grid gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-40 w-full rounded-lg" />
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <p className="text-red-600">{(error as any).message}</p>
-        <Button onClick={() => refetch()}>Try Again</Button>
-      </div>
-    );
-  }
-
-  return (
-    <div className="container mx-auto p-4 md:p-6">
-      {/* Banner */}
-      <div className="w-full rounded-2xl overflow-hidden relative bg-gray-100">
-        <div className="relative h-40 md:h-56 lg:h-72">
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              style={{ objectFit: "cover" }}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-100 to-amber-50" />
-          )}
-        </div>
-        <div className="absolute left-6 top-6 md:top-8">
-          <h1 className="text-2xl md:text-3xl font-semibold text-white drop-shadow-md">
-            {title}
-          </h1>
-        </div>
-      </div>
-              {/* {isFetching && <p className="text-sm text-muted">Updating results...</p>} */}
- 
-      <div className="mt-6 space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
-          {isDesktop && (
-            <aside className="md:col-span-1">
-            <CategoryFilter />
-          </aside>
-          ) }
-           <section className={isDesktop ? "md:col-span-5 space-y-4" : "col-span-6"}>
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-muted">
-                Showing {products.length} results
-              </div>
-              <div className="flex items-center gap-3">
-                {/* <SortBar
-                  sort={sort}
-                  onChange={onChangeSort}
-                  onSearch={onSearchChange}
-                /> */}
-              </div>
-            </div>
-
-            <div className="mt-6">
+         <div className="mt-6">
               <>
                 <ul className="grid gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
-                  {products.map((product) => (
+                  {products.map((product:any) => (
                     <li
                       key={product._id}
                       className="border rounded-lg shadow-sm p-4 hover:shadow-md transition"
@@ -122,10 +25,6 @@ export default function CategoryProductList({ slug, initialData }: CategoryProdu
                   ))}
                 </ul>
               </>
-            </div>
-          </section>
         </div>
-      </div>
-    </div>
-  );
+    )
 }
