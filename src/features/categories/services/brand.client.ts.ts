@@ -1,7 +1,7 @@
 import { api } from "@/lib/axios";
-import { Brand } from "../types";
+import { BrandsResponse } from "../types";
 
-export async function getAllBrandsClient(): Promise<Brand[]>{
+export async function getAllBrandsClient(): Promise<BrandsResponse>{
     const res = await api.get("/brands");
     return res.data
 } 

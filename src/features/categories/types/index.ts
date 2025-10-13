@@ -49,3 +49,8 @@ export interface CategoryRequest {
     description: string;
     image: string;
 }
+
+export interface BrandsResponse {
+  sucess: boolean;
+  data: Brand[];
+}
