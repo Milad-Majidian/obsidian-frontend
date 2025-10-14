@@ -38,8 +38,6 @@ export default function CategoryPage({
     useCategoryProducts(slug, initialData, initialFilters);
   const products = data?.data || [];
 
-  const { isMobile, isDesktop } = useResponsive();
-
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
@@ -50,7 +48,7 @@ export default function CategoryPage({
   }
 
   return (
-    <HydrationBoundary state={dehydrate(new QueryClient())}>
+    // <HydrationBoundary state={dehydrate(new QueryClient())}>
       <div className="container mx-auto p-4 md:p-6">
         {/* Banner */}
         <div className="w-full rounded-2xl overflow-hidden relative bg-gray-100">
@@ -97,6 +95,6 @@ export default function CategoryPage({
           </div>
         </div>
       </div>
-    </HydrationBoundary>
+    // </HydrationBoundary>
   );
 }

@@ -18,9 +18,10 @@ export const useCategoryProducts = (slug:string, initialData: CategoryProductsRe
   return useQuery({
     queryKey: ["categoryProducts", slug, filter],
     queryFn: () => getCategoryProductsClient({slug, ...filter}),
-    placeholderData: initialData,
+    initialData,
+    staleTime: 1000 * 60 * 5, // cache for 5 min
     refetchOnMount : false,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5, // cache for 5 min
+    refetchOnReconnect: false,
   });
 };

@@ -1,8 +1,10 @@
-import CategoryProductList from "@/features/categories/components/CategoryPage";
 import { Metadata } from "next";
 import { getCategoryProductsServer } from "@/features/categories/services/category.server";
 import { parseCategoryFilters } from "@/features/categories/utils/parseCategoryFilters";
 import CategoryPage from "@/features/categories/components/CategoryPage";
+import { CategoryServerError } from "@/features/categories/components/CategoryServerError";
+import { notFound } from "next/navigation";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
 interface Props {
   params: Promise<{ category: string}>;
@@ -28,12 +30,32 @@ export async function generateMetadata({params}: { params: Promise<{ category: s
 
 export default async function CategoriesPage({params, searchParams}: Props) {
   const { category }  = await params;
-
   const filters = parseCategoryFilters(await searchParams);
-  const data = await getCategoryProductsServer({ slug: category, ...filters });
 
-  return (
-      <CategoryPage  slug={category} initialData={data} initialFilters={filters} />
+  const queryClient = new QueryClient();
 
-  );
+  try {
+    // const data = await getCategoryProductsServer({ slug: category, ...filters });
+     await queryClient.prefetchQuery({
+      queryKey: ["category-products", category, filters],
+      queryFn: () => getCategoryProductsServer({ slug: category, ...filters }),
+    });
+    const data = queryClient.getQueryData<any>([
+      "category-products",
+      category,
+      filters,
+    ]);
+    if(!data || data.data.length === 0) {
+     notFound();
+    }
+      const dehydratedState = dehydrate(queryClient);
+    return (
+     <HydrationBoundary state={dehydratedState} >
+        <CategoryPage  slug={category} initialData={data} initialFilters={filters} />
+     </HydrationBoundary>
+    );
+  } catch (error) {
+    return <CategoryServerError />;
+  }
+  
 }
