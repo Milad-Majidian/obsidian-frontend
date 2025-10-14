@@ -12,7 +12,7 @@ import { usePathname, useRouter,useSearchParams } from "next/navigation";
  * It also provides functions to update these parameters, which in turn updates the displayed products based on the selected filters.
  */
 
-export function useCategoryFilters(){
+export function useCategoryFilters() {
     const searchParams = useSearchParams();
     const searchParamsString = searchParams.toString();
     const pathname = usePathname()

@@ -1,16 +1,17 @@
 "use client";
 import Image from "next/image";
 import { CategoryProductsResponse } from "../types";
-import { useCategoryProducts } from "../hooks/useCategoryProducts";
 import { Button } from "@/components/ui/elements/Button";
 import { Suspense } from "react";
 import CategoryFilterBox from "./CategoryFilterBox";
+import { useCategoryProducts } from "../hooks/useCategoryProducts";
 import { FiltersSkeleton } from "./FiltersSkeleton";
 import { SortSkeleton } from "./SortSkeleton";
 import { CategorySortBox } from "./CategorySortBox";
 import { CategoryProductList } from "./CategoryProductList";
 import { ProductListSkeleton } from "./productLIstSkeleton";
 import { ErrorBoundary } from "@/common/components/ErrorBoundary";
+import SortBar from "./SortBar";
 
 const imageUrl = "/categories/banner.jpg";
 interface CategoryProductListProps {

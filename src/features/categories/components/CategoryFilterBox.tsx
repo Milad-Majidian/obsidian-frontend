@@ -12,7 +12,7 @@ export default function CategoryFilterBox() {
       <FilterBoxBrand />
       <Separator />
       {/* Price */}
-      <div className="space-y-2">
+      {/* <div className="space-y-2">
         <label className="font-semibold">Price</label>
         <div className="flex flex-col gap-2">
           <Input
@@ -28,7 +28,7 @@ export default function CategoryFilterBox() {
             onChange={(e) => setFilter("maxPrice", e.target.value)}
           />
         </div>
-      </div>
+      </div> */}
       <Separator />
       {/* Stock */}
       <div className="flex items-center gap-2">

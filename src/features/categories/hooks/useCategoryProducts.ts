@@ -12,8 +12,7 @@ import { getCategoryProductsClient } from "../services/category.client";
  */
 
 
-export const useCategoryProducts = (slug:string, initialData: CategoryProductsResponse, filter:FilterParams) => {
-
+export function useCategoryProducts (slug:string, initialData: CategoryProductsResponse, filter:FilterParams) {
   // Fetch products with filters from URL and pagination 
   return useQuery({
     queryKey: ["categoryProducts", slug, filter],

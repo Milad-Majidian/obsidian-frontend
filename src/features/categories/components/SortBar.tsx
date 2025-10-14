@@ -1,4 +1,3 @@
-
 import { Input } from "@/components/ui/input";
 import { ArrowUpDown, Search } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -8,16 +7,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
 function useDebouncedValue<T>(value: T, delay = 300) {
-const [debounced, setDebounced] = useState(value);
-useEffect(() => {
-const t = setTimeout(() => setDebounced(value), delay);
-return () => clearTimeout(t);
-}, [value, delay]);
-return debounced;
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
 }
 
 export default function SortBar({
