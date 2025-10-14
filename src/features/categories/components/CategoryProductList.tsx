@@ -1,5 +1,6 @@
+import { Product } from "@/features/products/types";
 
-export function CategoryProductList({ products }:any) {
+export function CategoryProductList({ products }: { products: Product[] }) {
     return (
          <div className="mt-6">
               <>

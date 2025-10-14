@@ -10,7 +10,7 @@ import { useBrands } from "../hooks/useBrands";
 
 export function FilterBoxBrand() {
     const { filters, setFilter } = useCategoryFilters();
-    const { data, isLoading: brandsLoading } = useBrands(false);
+    const { data, isLoading: brandsLoading } = useBrands(true);
     const  brandsData = data?.data || [];
     const [search, setSearch] = React.useState("");
 

@@ -5,6 +5,7 @@ import CategoryPage from "@/features/categories/components/CategoryPage";
 import { CategoryServerError } from "@/features/categories/components/CategoryServerError";
 import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { CategoryProductsResponse } from "@/features/categories/types";
 
 interface Props {
   params: Promise<{ category: string}>;
@@ -40,7 +41,7 @@ export default async function CategoriesPage({params, searchParams}: Props) {
       queryKey: ["category-products", category, filters],
       queryFn: () => getCategoryProductsServer({ slug: category, ...filters }),
     });
-    const data = queryClient.getQueryData<any>([
+    const data = queryClient.getQueryData<CategoryProductsResponse>([
       "category-products",
       category,
       filters,
@@ -54,8 +55,9 @@ export default async function CategoriesPage({params, searchParams}: Props) {
         <CategoryPage  slug={category} initialData={data} initialFilters={filters} />
      </HydrationBoundary>
     );
-  } catch (error) {
-    return <CategoryServerError />;
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : "Something went wrong";
+    return CategoryServerError(message);
   }
   
 }
