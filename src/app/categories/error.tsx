@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/elements/Button';
 
 export default function CategoryError({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter()
@@ -16,7 +16,6 @@ export default function CategoryError({ error, reset }: { error: Error; reset: (
       {/* <p className="text-gray-500 mb-6">{error.message || 'Please try again later.'}</p> */}
       {/* <Button onClick={() => reset()}>Reload Category</Button> */}
       <Button onClick={() => router.push('/') }>Go to Home</Button>
-
     </div>
   );
 }

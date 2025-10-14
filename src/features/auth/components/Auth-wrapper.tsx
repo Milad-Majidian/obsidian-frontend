@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useAuthMode } from "@/features/auth/hooks/useAuthMode";
 import { LoginBox } from "./LoginBox";
 import { RegisterBox } from "./RegisterBox";
+import { Button } from "@/components/ui/elements/Button";
 
 export const AuthWrapper = () => {
   const { mode, toggleMode } = useAuthMode();
@@ -38,22 +39,22 @@ export const AuthWrapper = () => {
         {mode === "login" ? (
           <>
             Don’t have an account?{" "}
-            <button
+            <Button
               className="text-primary underline cursor-pointer"
               onClick={() => toggleMode()}
             >
               Create Account
-            </button>
+            </Button>
           </>
         ) : (
           <>
             Already have an account?{" "}
-            <button
+            <Button
               className="text-primary underline cursor-pointer"
               onClick={() => toggleMode()}
             >
               Log In
-            </button>
+            </Button>
           </>
         )}
          </div>

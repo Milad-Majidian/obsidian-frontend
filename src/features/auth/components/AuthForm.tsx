@@ -6,11 +6,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useState } from "react";
 import { loginSchema, LoginSchema, registerSchema, RegisterSchema } from "../schemas/authSchema";
-import { useToastMessage } from "@/hooks/useToastMessage";
 import { useAuth } from "../hooks/useAuth";
 import { Input } from "@/components/ui/elements/Input";
 import { Button } from "@/components/ui/elements/Button";
 import { useRegister } from "../hooks/useRegister";
+import { useToastMessage } from "@/common/hooks/useToastMessage";
 
 type Mode = "login" | "register";
 

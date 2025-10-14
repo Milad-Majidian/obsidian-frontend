@@ -1,5 +1,4 @@
-import { Button } from "@/components/ui/button";
-
+import { Button } from "@/components/ui/elements/Button";
 
 export function CategoryServerError(message: string) {
   return (

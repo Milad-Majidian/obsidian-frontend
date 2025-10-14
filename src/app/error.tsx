@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/elements/Button';
 import { useEffect } from 'react';
 
 export default function GlobalError({ error, reset }: {
@@ -21,12 +22,12 @@ export default function GlobalError({ error, reset }: {
         <p className="text-sm text-muted-foreground mb-6">
           {error.message || 'An unexpected error occurred.'}
         </p>
-        <button
+        <Button
           onClick={() => reset()}
           className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark"
         >
           Try Again
-        </button>
+        </Button>
       </div>
     </div>
 
