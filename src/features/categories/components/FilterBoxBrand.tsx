@@ -5,11 +5,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useBrands } from "../hooks/useBrands";
 import { Input } from "@/components/ui/elements/Input";
+import { useParams } from "next/navigation";
 
 
 export function FilterBoxBrand() {
     const { filters, setFilter } = useCategoryFilters();
-    const { data, isLoading: brandsLoading } = useBrands(true);
+    const { category } = useParams<{category: string}>();
+    const { data, isLoading: brandsLoading } = useBrands(category);
+
     const  brandsData = data?.data || [];
     const [search, setSearch] = React.useState("");
 
