@@ -22,7 +22,7 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "types": ["next-auth", "./types"],
+  "include": ["src","next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "vitest.config.ts"],
+  "types": ["next-auth", "./types","vitest", "node"],
   "exclude": ["node_modules"]
 }

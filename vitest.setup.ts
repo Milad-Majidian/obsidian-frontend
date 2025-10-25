@@ -1,9 +1,9 @@
 import "@testing-library/jest-dom";
+import { beforeAll, afterEach, afterAll } from "vitest";
+import { server } from "@/mocks/server";
 
-// If you’ll use MSW (mock service worker):
-import { server } from "./src/mocks/server";
-
-// Start and stop mock server for tests
+// Start and stop MSW server for tests
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
