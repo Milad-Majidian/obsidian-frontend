@@ -10,12 +10,14 @@ export const getCategoryProductsClient = async ({
   if (filters.minPrice) query.append("minPrice", filters.minPrice.toString());
   if (filters.maxPrice) query.append("maxPrice", filters.maxPrice.toString());
   if (filters.inStock !== undefined)
-    query.append("inStock", filters.inStock.toString());
+  query.append("inStock", filters.inStock.toString());
+  // query.append("perPage", (filters.limit ?? 15).toString());
   if (filters.page) query.append("page", filters.page.toString());
 
   const response = await api.get<CategoryProductsResponse>(
     `/products?category=${slug}&${query.toString()}`
   );
+  await new Promise((resolve) => setTimeout(resolve, 2000)); 
   return response.data;
 
 };

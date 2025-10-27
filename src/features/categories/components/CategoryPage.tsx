@@ -1,17 +1,14 @@
 "use client";
 import Image from "next/image";
 import { CategoryProductsResponse } from "../types";
-import { Button } from "@/components/ui/elements/Button";
-import { Suspense } from "react";
+import React, { Suspense, useEffect, useRef } from "react";
 import CategoryFilterBox from "./CategoryFilterBox";
 import { useCategoryProducts } from "../hooks/useCategoryProducts";
 import { FiltersSkeleton } from "./FiltersSkeleton";
 import { SortSkeleton } from "./SortSkeleton";
 import { CategorySortBox } from "./CategorySortBox";
 import { CategoryProductList } from "./CategoryProductList";
-import { ProductListSkeleton } from "./productLIstSkeleton";
 import { ErrorBoundary } from "@/common/components/ErrorBoundary";
-import SortBar from "./SortBar";
 
 const imageUrl = "/categories/banner.jpg";
 interface CategoryProductListProps {
@@ -25,18 +22,8 @@ export default function CategoryPage({
   initialData,
   initialFilters,
 }: CategoryProductListProps) {
-  const { data, isLoading, isError, error, refetch, isFetching } =
-    useCategoryProducts(slug, initialData, initialFilters);
-  const products = data?.data || [];
 
-  // if (isError) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center h-64 space-y-4">
-  //       <p className="text-red-600">{(error as any).message}</p>
-  //       <Button onClick={() => refetch()}>Try Again</Button>
-  //     </div>
-  //   );
-  // }
+  const query = useCategoryProducts(slug, initialData, initialFilters);
 
   return (
     <div className="container mx-auto p-4 md:p-6">
@@ -80,11 +67,8 @@ export default function CategoryPage({
               </Suspense>
             </ErrorBoundary>
 
-            {isLoading ? (
-              <ProductListSkeleton />
-            ) : (
-                <CategoryProductList products={products} />
-            )}
+            {/* Product List (with infinite scroll inside) */}
+          <CategoryProductList {...query} />
           </main>
         </div>
       </div>

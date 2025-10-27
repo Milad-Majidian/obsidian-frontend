@@ -16,7 +16,8 @@ export interface FilterParams {
   inStock?: boolean;
   sortBy?: string;
   order?: string;
-  page?: number;
+  limit?: number;
+  page?: number | unknown;
 }
 export interface ProductQuery extends FilterParams {
     slug: string;
@@ -35,6 +36,8 @@ export interface Pagination {
   total: number;
   page: number;
   limit: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
   totalPages: number;
 }
 

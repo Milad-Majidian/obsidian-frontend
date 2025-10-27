@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { CategoryProductsResponse, FilterParams,  } from "../types";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { CategoryProductsResponse, FilterParams } from "../types";
 import { getCategoryProductsClient } from "../services/category.client";
 
 /**
@@ -11,16 +11,32 @@ import { getCategoryProductsClient } from "../services/category.client";
  * @returns {object} - The query result object from React Query.
  */
 
+export function useCategoryProducts(
+  slug: string,
+  initialData: CategoryProductsResponse,
+  filter: FilterParams
+) {
+  // Infinite query under the hood, but select the latest page so consumers can keep using data?.data
+  return useInfiniteQuery<CategoryProductsResponse>({
+    queryKey: ["categoryProducts", slug, JSON.stringify(filter)],
+    initialPageParam: 1,
+    queryFn: ({ pageParam = 1 }) =>
+    getCategoryProductsClient({ slug, page: pageParam, ...filter }),
+    getNextPageParam: (lastPage) => {
+      const currentPage = lastPage.pagination.page 
+      const totalPages = lastPage.pagination.totalPages 
+      return currentPage < totalPages ? currentPage + 1 : undefined;
+    },
 
-export function useCategoryProducts (slug:string, initialData: CategoryProductsResponse, filter:FilterParams) {
-  // Fetch products with filters from URL and pagination 
-  return useQuery({
-    queryKey: ["categoryProducts", slug, filter],
-    queryFn: () => getCategoryProductsClient({slug, ...filter}),
-    initialData,
-    staleTime: 1000 * 60 * 5, // cache for 5 min
-    refetchOnMount : false,
+    initialData: {
+      pages: [initialData],
+      pageParams: [1],
+    },
+    // Keep data fresh for 5 minutes
+    staleTime: 1000 * 60 * 5,
+    // Avoid unnecessary re-fetching on mount/focus/reconnect
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
   });
-};
+}
