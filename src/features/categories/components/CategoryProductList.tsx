@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import type { Product } from "@/features/products/types";
 import { ProductListSkeleton } from "./productLIstSkeleton";
+import { ProductCardSkeletonGrid } from "./ProductCardSkeleton";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/elements/Button";
 
@@ -78,7 +79,7 @@ export function CategoryProductList({
   return (
     <div className="space-y-6">
       {/* Product Grid */}
-      <ul className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+      <ul className="grid gap-3 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {products.map((product) => (
           <li
             key={product._id}
@@ -90,17 +91,17 @@ export function CategoryProductList({
                 alt={product.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-200"
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
               />
             </div>
-            <div className="p-3 space-y-1">
-              <h3 className="font-semibold text-sm line-clamp-2 text-gray-900">
+            <div className="p-2.5 space-y-1">
+              <h3 className="font-semibold text-xs line-clamp-2 text-gray-900">
                 {product.name}
               </h3>
-              <p className="text-lg font-bold text-emerald-600">
+              <p className="text-base font-bold text-emerald-600">
                 ${product.price.toFixed(2)}
               </p>
-              <p className="text-xs text-gray-500 line-clamp-2">
+              <p className="text-xs text-gray-500 line-clamp-1">
                 {product.description}
               </p>
             </div>
@@ -125,24 +126,22 @@ export function CategoryProductList({
         </div>
       )}
 
-      {/* Infinite scroll trigger + status */}
-      <div
-        ref={loadMoreRef}
-        className="flex justify-center py-8"
-        aria-live="polite"
-      >
-        {isFetchingNextPage && (
-          <div className="flex items-center gap-2 text-gray-600">
-            <div className="w-5 h-5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin" />
-            <span className="text-sm">Loading more products...</span>
-          </div>
-        )}
-        {!hasNextPage && !isFetchingNextPage && products.length > 0 && (
+      {/* Loading next page - show skeleton cards */}
+      {isFetchingNextPage && (
+        <ProductCardSkeletonGrid count={8} />
+      )}
+
+      {/* Infinite scroll trigger (invisible anchor) */}
+      <div ref={loadMoreRef} className="h-4" aria-hidden="true" />
+
+      {/* End of list indicator */}
+      {!hasNextPage && !isFetchingNextPage && products.length > 0 && (
+        <div className="flex justify-center py-8">
           <p className="text-sm text-gray-400">
             You've reached the end
           </p>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
