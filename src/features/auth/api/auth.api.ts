@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { RegisteredResponse, RegisterRequest } from '../types';
-import { useToastMessage } from '@/hooks/useToastMessage';
 import { registerService } from '../services/auth-service';
+import { useToastMessage } from '@/common/hooks/useToastMessage';
 
  export const useRegisterMutation = () => {
    const {showError,showSuccess } = useToastMessage() 
