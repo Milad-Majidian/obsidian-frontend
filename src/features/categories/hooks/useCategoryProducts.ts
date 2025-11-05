@@ -3,40 +3,54 @@ import { CategoryProductsResponse, FilterParams } from "../types";
 import { getCategoryProductsClient } from "../services/category.client";
 
 /**
- * useCategoryProducts - Fetches products for a specific category.
- *
- * @param {string} slug - The category slug.
- * @param {CategoryProductsResponse} initialData - Initial data for the category products.
- * @param {FilterParams} filterParams - Initial filter settings for the products.
- * @returns {object} - The query result object from React Query.
+ * useCategoryProducts - Infinite scroll query for category products
+ * 
+ * Features:
+ * - Server-side pagination with infinite scroll
+ * - Optimistic initial data from SSR
+ * - Smart caching (5min stale time)
+ * - Deduplication via stable query keys
+ * 
+ * @param slug - Category identifier
+ * @param initialData - SSR/SSG hydration data for first page
+ * @param filter - Active filters (brand, price, stock, etc.)
+ * @returns InfiniteQuery result with fetchNextPage, hasNextPage, etc.
  */
-
 export function useCategoryProducts(
   slug: string,
   initialData: CategoryProductsResponse,
   filter: FilterParams
 ) {
-  // Infinite query under the hood, but select the latest page so consumers can keep using data?.data
-  return useInfiniteQuery<CategoryProductsResponse>({
-    queryKey: ["categoryProducts", slug, JSON.stringify(filter)],
+  return useInfiniteQuery<
+    CategoryProductsResponse,
+    Error,
+    CategoryProductsResponse
+  >({
+    queryKey: ["categoryProducts", slug, filter],
     initialPageParam: 1,
-    queryFn: ({ pageParam = 1 }) =>
-    getCategoryProductsClient({ slug, page: pageParam, ...filter }),
+    queryFn: ({ pageParam }) =>
+      getCategoryProductsClient({ slug, page: pageParam as number, ...filter }),
+    
     getNextPageParam: (lastPage) => {
-      const currentPage = lastPage.pagination.page 
-      const totalPages = lastPage.pagination.totalPages 
-      return currentPage < totalPages ? currentPage + 1 : undefined;
+      const { page, totalPages } = lastPage.pagination;
+      return page < totalPages ? page + 1 : undefined;
     },
 
+    // Hydrate with SSR data for instant first render
     initialData: {
       pages: [initialData],
       pageParams: [1],
     },
-    // Keep data fresh for 5 minutes
-    staleTime: 1000 * 60 * 5,
-    // Avoid unnecessary re-fetching on mount/focus/reconnect
+
+    // Performance optimizations
+    staleTime: 1000 * 60 * 5, // 5min cache
+    gcTime: 1000 * 60 * 10, // 10min garbage collection (formerly cacheTime)
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
+    
+    // Retry strategy for network failures
+    retry: 2,
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 10000),
   });
 }
