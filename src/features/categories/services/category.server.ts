@@ -10,7 +10,7 @@ export const getCategoryProductsServer = async (
     if (params.inStock !== undefined) query.append("inStock", params.inStock.toString());
     if (params.page) query.append("page", params.page.toString());
      query.append("limit", (15).toString())
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
     const res = await fetch(`${baseUrl}/products?category=${params.slug}&${query.toString()}`, {
         cache: 'no-store',
     });
