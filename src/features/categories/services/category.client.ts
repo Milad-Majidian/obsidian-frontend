@@ -9,9 +9,8 @@ export const getCategoryProductsClient = async ({
   if (filters.brand) query.append("brand", filters.brand);
   if (filters.minPrice) query.append("minPrice", filters.minPrice.toString());
   if (filters.maxPrice) query.append("maxPrice", filters.maxPrice.toString());
-  if (filters.inStock !== undefined)
-  query.append("inStock", filters.inStock.toString());
-  // query.append("perPage", (filters.limit ?? 15).toString());
+  if (filters.sort) query.append("sort", filters.sort);
+  if (filters.inStock !== undefined) query.append("inStock", filters.inStock.toString());
   if (filters.page) query.append("page", filters.page.toString());
 
   const response = await api.get<CategoryProductsResponse>(
