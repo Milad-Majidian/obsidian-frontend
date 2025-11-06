@@ -4,7 +4,7 @@ import { usePathname, useRouter,useSearchParams } from "next/navigation";
  * useCategoryFilters - A custom hook to manage category filters using URL search parameters.
  *
  * @returns {object} - An object containing current filter values and functions to set and reset filters.
- * - filters: Current filter values (brand, minPrice, maxPrice, inStock, sortBy, order, page).
+ * - filters: Current filter values (brand, minPrice, maxPrice, inStock, sort, order, page).
  * - setFilter: Function to update a specific filter and modify the URL accordingly.
  * - resetFilters: Function to clear all filters and reset the URL to the base category path.
  *
@@ -23,7 +23,7 @@ export function useCategoryFilters() {
         minPrice: searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined,
         maxPrice: searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined,
         inStock: searchParams.get('inStock') === 'true' ? true : searchParams.get('inStock') ==='false' ? false : undefined,
-        sortBy: searchParams.get('sortBy') || undefined,
+        sort: searchParams.get('sort') || undefined,
         order: searchParams.get('order') || undefined,
         page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
     }
@@ -41,6 +41,7 @@ export function useCategoryFilters() {
         }
         const queryString = params.toString();
         const url = queryString ? `${pathname}?${queryString}` : pathname;
+        console.log('url',url)
         router.push(url);
     }
 

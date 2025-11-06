@@ -57,7 +57,7 @@ const getQuery = (request: Request) => {
         brand: url.searchParams.get("brand") || "All",
         page: parseNumber(url.searchParams.get("page"), 1, 1),
         perPage: parseNumber(url.searchParams.get("perPage"), 10, 1, 100),
-        sortBy: url.searchParams.get("sortBy") || "name", // name | price
+        sort: url.searchParams.get("sort") || "name", // name | price
         sortDir: (url.searchParams.get("sortDir") || "asc").toLowerCase() as "asc" | "desc",
         delayMs: parseNumber(url.searchParams.get("delay"), 0, 0, 5000),
     } as const;
@@ -70,7 +70,7 @@ const sorters: Record<string, (a: Product, b: Product) => number> = {
 
 export const categoryHandlers = [
     http.get("/products", async ({ request }) => {
-        const { category, brand, page, perPage, sortBy, sortDir, delayMs } = getQuery(request);
+        const { category, brand, page, perPage, sort, sortDir, delayMs } = getQuery(request);
 
         if (delayMs > 0) await delay(delayMs);
 
@@ -87,7 +87,7 @@ export const categoryHandlers = [
             items = items.filter((p) => p.brand.toLowerCase() === brand.toLowerCase());
         }
 
-        const sorter = sorters[sortBy] ?? sorters.name;
+        const sorter = sorters[sort] ?? sorters.name;
         items.sort(sorter);
         if (sortDir === "desc") items.reverse();
 

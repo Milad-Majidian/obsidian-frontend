@@ -14,7 +14,7 @@ export interface FilterParams {
   minPrice?: number | null;
   maxPrice?: number | null;
   inStock?: boolean;
-  sortBy?: string;
+  sort?: string;
   order?: string;
   limit?: number;
   page?: number | unknown;
@@ -36,8 +36,8 @@ export interface Pagination {
   total: number;
   page: number;
   limit: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
+  hasNextPage?: boolean;
+  hasPrevPage?: boolean;
   totalPages: number;
 }
 

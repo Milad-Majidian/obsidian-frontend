@@ -12,7 +12,7 @@ export function parseCategoryFilters(query: Record<string, string | string[] | u
         : query.inStock === "false"
         ? false
         : undefined,
-    sortBy: typeof query.sortBy === "string" ? query.sortBy : "createdAt",
+    sort: typeof query.sort === "string" ? query.sort : "createdAt",
     order: query.order === "asc" || query.order === "desc" ? query.order : "desc",
     page: query.page ? Number(query.page) : 1,
   };
