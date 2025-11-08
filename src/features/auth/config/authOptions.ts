@@ -3,9 +3,11 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+
 async function refreshAccessToken(token: any) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+    const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refreshToken: token.refreshToken }),
@@ -54,7 +56,7 @@ const authOptions: NextAuthConfig = {
             if (!credentials?.email || !credentials?.password) {
               return null
             }
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+            const res = await fetch(`${API_BASE_URL}/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
