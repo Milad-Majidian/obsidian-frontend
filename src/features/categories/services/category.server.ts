@@ -7,6 +7,7 @@ export const getCategoryProductsServer = async (
     if (params.brand) query.append("brand", params.brand);
     if (params.minPrice) query.append("minPrice", params.minPrice.toString());
     if (params.maxPrice) query.append("maxPrice", params.maxPrice.toString());
+    if (params.sort) query.append("sort", params.sort);
     if (params.inStock !== undefined) query.append("inStock", params.inStock.toString());
     if (params.page) query.append("page", params.page.toString());
      query.append("limit", (15).toString())
