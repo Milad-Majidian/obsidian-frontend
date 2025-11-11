@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactQueryProvider, ThemeProvider } from "./providers";
 import { Toaster } from "sonner";
+import { ErrorBoundary } from "@/common/components/ErrorBoundary";
 
 
 const geistSans = Geist({
@@ -31,11 +32,14 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       {/* className={`${geistSans.variable} ${geistMono.variable} antialiased`} */}
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <ReactQueryProvider>
-              <SessionProvider>{children}</SessionProvider>
-            </ReactQueryProvider>
-        </ThemeProvider>
+        {/* App-level error boundary catches catastrophic failures */}
+        <ErrorBoundary level="page">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <ReactQueryProvider>
+                <SessionProvider>{children}</SessionProvider>
+              </ReactQueryProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
         <Toaster />
       </body>
     </html>
