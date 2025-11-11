@@ -1,7 +1,7 @@
 import { toast } from "sonner";
-import { useToastMessage } from "@/hooks/useToastMessage";
 import { useRegisterMutation } from "../api/auth.api";
 import { RegisterRequest } from "../types";
+import { useToastMessage } from "@/common/hooks/useToastMessage";
 
 export const useRegister = () => {
   const registerMutation = useRegisterMutation();
