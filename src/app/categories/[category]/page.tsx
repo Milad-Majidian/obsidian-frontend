@@ -36,13 +36,13 @@ export default async function CategoriesPage({params, searchParams}: Props) {
   const queryClient = new QueryClient();
 
   try {
-    // const data = await getCategoryProductsServer({ slug: category, ...filters });
+    // ✅ Match the exact queryKey from useCategoryProducts hook
      await queryClient.prefetchQuery({
-      queryKey: ["category-products", category, filters],
+      queryKey: ["categoryProducts", category, filters],
       queryFn: () => getCategoryProductsServer({ slug: category, ...filters }),
     });
     const data = queryClient.getQueryData<CategoryProductsResponse>([
-      "category-products",
+      "categoryProducts",
       category,
       filters,
     ]);
