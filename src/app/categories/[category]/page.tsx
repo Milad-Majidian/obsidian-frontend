@@ -6,6 +6,7 @@ import { CategoryServerError } from "@/features/categories/components/CategorySe
 import { notFound } from "next/navigation";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { CategoryProductsResponse } from "@/features/categories/types";
+import { PackageOpen } from "lucide-react";
 
 interface Props {
   params: Promise<{ category: string}>;
@@ -36,7 +37,6 @@ export default async function CategoriesPage({params, searchParams}: Props) {
   const queryClient = new QueryClient();
 
   try {
-    // ✅ Match the exact queryKey from useCategoryProducts hook
      await queryClient.prefetchQuery({
       queryKey: ["categoryProducts", category, filters],
       queryFn: () => getCategoryProductsServer({ slug: category, ...filters }),
@@ -46,8 +46,21 @@ export default async function CategoriesPage({params, searchParams}: Props) {
       category,
       filters,
     ]);
-    if(!data || data.data.length === 0) {
+    if(!data) {
+      console.log('No data found for category:', category);
      notFound();
+    }
+    if(data && data.data.length === 0){
+      return (
+        <div className="flex flex-col items-center justify-center py-16">
+          <PackageOpen className="w-16 h-16 text-gray-300 mb-4" />
+          <h2 className="text-xl font-semibold text-gray-700 mb-2">No products found</h2>
+          <p className="text-gray-500 mb-4 text-center">
+            There are currently no products in this category.<br />
+            Please check back later or explore other categories.
+          </p>
+        </div>
+      );
     }
       const dehydratedState = dehydrate(queryClient);
     return (
