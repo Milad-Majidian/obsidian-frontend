@@ -41,7 +41,6 @@ export function useCategoryFilters() {
         }
         const queryString = params.toString();
         const url = queryString ? `${pathname}?${queryString}` : pathname;
-        console.log('url',url)
         router.push(url);
     }
 

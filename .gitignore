@@ -16,6 +16,9 @@
 /public/categories
 /public/products
 
+# docs
+/docs
+
 # Output directories
 dist/
 build/
