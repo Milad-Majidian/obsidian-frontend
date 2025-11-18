@@ -5,9 +5,9 @@ import { normalizeApiError } from "./apiError";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Debug log in development to catch configuration issues
-if (process.env.NODE_ENV === 'development') {
-  console.log('[Axios Config] API Base URL:', API_BASE_URL);
-}
+// if (process.env.NODE_ENV === 'development') {
+//   console.log('[Axios Config] API Base URL:', API_BASE_URL);
+// }
 
 export const api = axios.create({ 
   baseURL: API_BASE_URL,
