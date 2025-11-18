@@ -15,7 +15,7 @@ export interface FilterParams {
   maxPrice?: number | null;
   inStock?: boolean;
   sort?: string;
-  order?: string;
+  order: string;
   limit?: number;
   page?: number | unknown;
 }
