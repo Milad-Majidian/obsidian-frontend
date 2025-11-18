@@ -1,6 +1,6 @@
 // features/brands/hooks/useBrands.ts
 import { useQuery } from "@tanstack/react-query";
-import { getAllBrandsClient } from "../services/brand.client.ts";
+import { getAllBrandsClient } from "../services/brand.client";
 
 export function useBrands(category: string , enabled:boolean = true) {
   return useQuery({
