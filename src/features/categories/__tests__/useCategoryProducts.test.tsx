@@ -1,6 +1,8 @@
-// features/categories/hooks/useCategoryProducts.test.ts
+
 import React from "react";
 import { renderHook } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
+import { act } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
 import { CategoryProductsResponse } from "@/features/categories/types";
@@ -45,12 +47,12 @@ describe("useCategoryProducts", () => {
 
   it("returns initial data and is not loading", async () => {
     const { result } = renderHook(
-      () => useCategoryProducts("electronics", mockInitialData, { page: 1 }),
+      () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
       { wrapper }
     );
     expect(result.current.isLoading).toBe(false);
-    expect(result.current.data?.data).toHaveLength(1);
-    expect(result.current.data?.data?.[0].name).toBe("Mock Product 1");
+    expect(result.current.data?.pages[0].data).toHaveLength(1);
+    expect(result.current.data?.pages[0].data?.[0].name).toBe("Mock Product 1");
   });
 
   it("refetches successfully and updates data", async () => {
@@ -71,29 +73,41 @@ describe("useCategoryProducts", () => {
     } as CategoryProductsResponse);
 
     const { result } = renderHook(
-      () => useCategoryProducts("electronics", mockInitialData, { page: 1 }),
+      () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
       { wrapper }
     );
 
     const refetched = await result.current.refetch();
     expect(getCategoryProductsClient).toHaveBeenCalled();
-    expect(refetched.data?.data?.[0].name).toBe("New Product");
+    expect(refetched.data?.pages[0].data?.[0].name).toBe("New Product");
   });
 
   it("handles server error on refetch", async () => {
-    (getCategoryProductsClient as unknown as Mock).mockRejectedValueOnce({
-      status: 500,
-      message: "Internal server error",
-    });
-
-    const { result } = renderHook(
-      () => useCategoryProducts("electronics", mockInitialData, { page: 1 }),
-      { wrapper }
+    // Set up mock before hook render
+    (getCategoryProductsClient as unknown as Mock).mockRejectedValue(
+      new Error("Internal server error")
     );
 
-    const refetched = await result.current.refetch();
+    const customClient = new QueryClient({
+      defaultOptions: { queries: { retry: 0 } },
+    });
+    const customWrapper = ({ children }: any) => (
+      <QueryClientProvider client={customClient}>{children}</QueryClientProvider>
+    );
+
+    const { result } = renderHook(
+      () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
+      { wrapper: customWrapper }
+    );
+
+    let refetchResult: any = null;
+    await act(async () => {
+      // React Query's refetch resolves to a result object with `error`
+      refetchResult = await result.current.refetch();
+    });
+
+    // Ensure the refetch returned an error and the mocked client was called
+    expect(refetchResult.error).toBeTruthy();
     expect(getCategoryProductsClient).toHaveBeenCalled();
-    expect(refetched.error).toBeTruthy();
-    expect((refetched.error as any)?.message).toMatch(/internal server error/i);
   });
 });

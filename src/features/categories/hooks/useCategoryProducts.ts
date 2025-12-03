@@ -30,6 +30,7 @@ export function useCategoryProducts(
     queryFn: ({ pageParam }) => getCategoryProductsClient({ slug, ...filter,page: pageParam}),
 
     getNextPageParam: (lastPage) => {
+      if (!lastPage || !lastPage.pagination) return undefined;
       const { page, totalPages } = lastPage.pagination;
       return page < totalPages ? page + 1 : undefined;
     },
