@@ -1,11 +1,21 @@
-import type { NextAuthConfig } from  "next-auth";
 import NextAuth from "next-auth";
+import type { NextAuthConfig,User, Session as NextAuthSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
-async function refreshAccessToken(token: any) {
+type Token = {
+  id?: string | null;
+  email?: string | null;
+  name?: string | null;
+  accessToken?: string | null;
+  refreshToken?: string | null;
+  accessTokenExpires?: number | null;
+  error?: string | null;
+};
+
+async function refreshAccessToken(token: Token): Promise<Token> {
   try {
     const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: "POST",
@@ -89,7 +99,7 @@ const authOptions: NextAuthConfig = {
     maxAge: 60 * 60, // 1 hour
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: Token; user?: User }) {
       if (user) {
         return {
           id : user.id,
@@ -104,30 +114,17 @@ const authOptions: NextAuthConfig = {
       }
       return await refreshAccessToken(token);
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: NextAuthSession; token: Token }) {
       if (token) {
         session.user = {
           id: token.id as string,
           email: token.email as string,
           name: token.name as string | undefined,
-          emailVerified: null,
+          // emailVerified: null,
         };
         session.accessToken = token.accessToken as string;
       }
       return session;
-      // if (!session || !token) {
-      //     console.error("Missing session or token in session callback");
-      //  return session;
-      //   }
-      // try {
-      //    session.user.id = String(token.id);
-      //    session.user.email = String(token.email);
-      //    session.accessToken = String(token.accessToken);
-      //    session.refreshToken = String(token.refreshToken);
-      // } catch (error) {
-      //   console.error("Error setting session user:", error);
-      // }
-      // return session;
     },
   },
   pages: {

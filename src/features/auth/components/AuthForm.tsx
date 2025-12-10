@@ -14,6 +14,7 @@ import { useToastMessage } from "@/common/hooks/useToastMessage";
 
 type Mode = "login" | "register";
 
+
 export function AuthForm({ mode }: { mode: Mode }) {
   const { signInWithEmail } = useAuth();
   const { register: registerUser, isLoading } = useRegister();
@@ -27,18 +28,20 @@ export function AuthForm({ mode }: { mode: Mode }) {
       : { email: "", password: "" },
   });
 
-  const onSubmit = async (values: any) => {
-     if (mode === 'login') {
-       try {
-         await signInWithEmail(values);
-         showSuccess("Logged in successfully!");
-       } catch (error:any) {
-         showError(error.message);
-       }
+  const onSubmit = async (values: RegisterSchema | LoginSchema) => {
+    if (mode === "login") {
+      const payload = values as LoginSchema;
+      try {
+        await signInWithEmail(payload);
+        showSuccess("Logged in successfully!");
+      } catch (error: unknown) {
+        const message = (error as { message?: string })?.message ?? "Login failed";
+        showError(message);
+      }
     } else if (mode === "register") {
-        registerUser(values);
-    } else {
-      return
+      const payload = values as RegisterSchema;
+      // Map `name` -> `fullName` to match backend `RegisterRequest`
+      registerUser({ fullName: payload.name, email: payload.email, password: payload.password });
     }
   };
 
