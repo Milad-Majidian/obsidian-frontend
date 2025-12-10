@@ -13,15 +13,15 @@ export function FilterBoxBrand() {
     const { category } = useParams<{category: string}>();
     const { data, isLoading: brandsLoading } = useBrands(category);
 
-    const  brandsData = data?.data || [];
     const [search, setSearch] = React.useState("");
 
     const filteredBrands = React.useMemo(() => {
+        const brandsData = data?.data || [];
         if (!search) return brandsData;
-        return brandsData.filter((brand)=>
+        return brandsData.filter((brand) =>
             brand.name.toLowerCase().includes(search.toLowerCase())
-        )
-    }, [brandsData, search]);
+        );
+    }, [data, search]);
 
     const handleSelect = (brand: string) => {
         setFilter("brand", brand === filters.brand ? undefined : brand);

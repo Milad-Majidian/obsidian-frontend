@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { Category, CategoryProductsResponse, ProductQuery } from "../types";
+import { CategoryProductsResponse, ProductQuery } from "../types";
 
 export const getCategoryProductsClient = async ({
   slug,

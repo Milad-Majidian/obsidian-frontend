@@ -3,13 +3,17 @@
 import { useEffect, useRef, useMemo } from "react";
 import Image from "next/image";
 import type { Product } from "@/features/products/types";
+import type { CategoryProductsResponse } from "@/features/categories/types";
 import { ProductListSkeleton } from "./productLIstSkeleton";
 import { ProductCardSkeletonGrid } from "./ProductCardSkeleton";
 import { AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/elements/Button";
 
 interface CategoryProductListProps {
-  data: any;
+  data?: {
+    pages: CategoryProductsResponse[];
+    pageParams?: unknown[];
+  } | null;
   fetchNextPage: () => void;
   hasNextPage?: boolean;
   isFetchingNextPage: boolean;
@@ -31,7 +35,7 @@ export function CategoryProductList({
 
   // Flatten and deduplicate products from all pages
   const products: Product[] = useMemo(() => {
-    const all = data?.pages?.flatMap((page: any) => page.data) ?? [];
+    const all = data?.pages?.flatMap((page: CategoryProductsResponse) => page.data) ?? [];
     const uniqueMap = new Map<string, Product>();
     all.forEach((p: Product) => uniqueMap.set(p._id, p));
     return Array.from(uniqueMap.values());
@@ -138,7 +142,7 @@ export function CategoryProductList({
       {!hasNextPage && !isFetchingNextPage && products.length > 0 && (
         <div className="flex justify-center py-8">
           <p className="text-sm text-gray-400">
-            You've reached the end
+            You have reached the end
           </p>
         </div>
       )}

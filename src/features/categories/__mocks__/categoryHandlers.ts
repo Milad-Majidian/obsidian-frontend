@@ -11,21 +11,21 @@ type Product = {
   updatedAt: string;
 };
 
-type Pagination = {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-};
+// type Pagination = {
+//   page: number;
+//   limit: number;
+//   total: number;
+//   totalPages: number;
+//   hasNextPage: boolean;
+//   hasPrevPage: boolean;
+// };
 
-type ProductsResponse = {
-  category: string;
-  brand: string;
-  products: Product[];
-  pagination: Pagination;
-};
+// type ProductsResponse = {
+//   category: string;
+//   brand: string;
+//   products: Product[];
+//   pagination: Pagination;
+// };
 
 const MOCK_PRODUCTS: Record<string, Product[]> = {
   default: [

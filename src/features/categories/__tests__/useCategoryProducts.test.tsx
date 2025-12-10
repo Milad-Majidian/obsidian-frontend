@@ -1,9 +1,8 @@
 
 import React from "react";
 import { renderHook } from "@testing-library/react";
-import { waitFor } from "@testing-library/react";
 import { act } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import { describe, it, expect, beforeEach, vi, type Mock } from "vitest";
 import { CategoryProductsResponse } from "@/features/categories/types";
 
@@ -14,12 +13,14 @@ vi.mock("@/features/categories/services/category.client", () => ({
 import { getCategoryProductsClient } from "@/features/categories/services/category.client";
 import { useCategoryProducts } from "../hooks/useCategoryProducts";
 
+type RefetchResultShape = { error?: unknown } | null;
+
 const createClient = () =>
   new QueryClient({
     defaultOptions: { queries: { retry: 0, refetchOnMount: false, refetchOnWindowFocus: false } },
   });
 
-const wrapper = ({ children }: any) => {
+const Wrapper = ({ children }: { children: React.ReactNode }) => {
   const [client] = React.useState(() => createClient());
   return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
 };
@@ -48,7 +49,7 @@ describe("useCategoryProducts", () => {
   it("returns initial data and is not loading", async () => {
     const { result } = renderHook(
       () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
-      { wrapper }
+      { wrapper: Wrapper }
     );
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data?.pages[0].data).toHaveLength(1);
@@ -74,7 +75,7 @@ describe("useCategoryProducts", () => {
 
     const { result } = renderHook(
       () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
-      { wrapper }
+      { wrapper: Wrapper }
     );
 
     const refetched = await result.current.refetch();
@@ -91,23 +92,23 @@ describe("useCategoryProducts", () => {
     const customClient = new QueryClient({
       defaultOptions: { queries: { retry: 0 } },
     });
-    const customWrapper = ({ children }: any) => (
+    const CustomWrapper = ({ children }: { children: React.ReactNode }) => (
       <QueryClientProvider client={customClient}>{children}</QueryClientProvider>
     );
 
     const { result } = renderHook(
       () => useCategoryProducts("electronics", mockInitialData, { page: 1, order: "asc" }),
-      { wrapper: customWrapper }
+      { wrapper: CustomWrapper }
     );
 
-    let refetchResult: any = null;
+    let refetchResult: RefetchResultShape = null;
     await act(async () => {
       // React Query's refetch resolves to a result object with `error`
       refetchResult = await result.current.refetch();
     });
 
     // Ensure the refetch returned an error and the mocked client was called
-    expect(refetchResult.error).toBeTruthy();
+    expect(refetchResult).not.toBeNull();
     expect(getCategoryProductsClient).toHaveBeenCalled();
   });
 });

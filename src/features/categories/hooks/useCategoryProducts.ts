@@ -1,7 +1,6 @@
-import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { CategoryProductsResponse, FilterParams } from "../types";
 import { getCategoryProductsClient } from "../services/category.client";
-import { file } from "zod";
 
 /**
  * useCategoryProducts - Infinite scroll query for category products
