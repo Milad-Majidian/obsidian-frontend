@@ -8,6 +8,13 @@ import { Input } from "@/components/ui/elements/Input";
 import { useParams } from "next/navigation";
 
 
+
+// async function fetchUsers(): Promise<User[]> {
+//   const res = await fetch(`${baseUrl}/users`);
+//   const data = await res.json();
+//   return data;
+// }
+
 export function FilterBoxBrand() {
     const { filters, setFilter } = useCategoryFilters();
     const { category } = useParams<{category: string}>();

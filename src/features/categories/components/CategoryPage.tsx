@@ -9,7 +9,6 @@ import { CategoryError } from "./CategoryError";
 import { CategoryBanner } from "./CategoryBanner";
 import { ErrorBoundary } from "@/common/components/ErrorBoundary";
 
-
 interface CategoryPageProps {
   slug: string;
   initialData: CategoryProductsResponse;
@@ -18,29 +17,19 @@ interface CategoryPageProps {
 
 /**
  * CategoryPage - Main category view with filters, sort, and infinite scroll
- * 
+ *
  * Architecture:
  * - Hydrates with SSR initialData for instant first paint
  * - Delegates infinite scroll to CategoryProductList
  * - Filter/sort controls update query params via useCategoryFilters
  * - Each section has its own error boundary via child components
  */
-export default function CategoryPage({
-  slug,
-  initialData,
-  initialFilters,
-}: CategoryPageProps) {
+export default function CategoryPage({ slug, initialData, initialFilters }: CategoryPageProps) {
   const query = useCategoryProducts(slug, initialData, initialFilters);
 
   // Global error state (network/server failures)
   if (query.isError && !query.data) {
-    return (
-      <CategoryError
-        error={query.error}
-        onRetry={() => query.refetch()}
-        slug={slug}
-      />
-    );
+    return <CategoryError error={query.error} onRetry={() => query.refetch()} slug={slug} />;
   }
 
   return (
@@ -54,7 +43,7 @@ export default function CategoryPage({
           <ErrorBoundary
             level="section"
             fallback={
-              <div className="lg:w-1/6 w-full p-4 bg-yellow-50 rounded-lg">
+              <div className="lg:w-1/6 w-full p-5 bg-yellow-50 rounded-lg">
                 <p className="text-sm text-gray-600">Filters temporarily unavailable</p>
               </div>
             }
