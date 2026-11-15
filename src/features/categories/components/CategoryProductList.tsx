@@ -146,6 +146,19 @@ export function CategoryProductList({
           </p>
         </div>
       )}
+
+      {/* Fallback for no products (should be handled earlier) */}
+      {products.length === 0 && !isError && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <AlertCircle className="w-12 h-12 text-gray-400" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            No Products Found
+          </h3>
+          <p className="text-gray-600">
+            Try adjusting your filters or check back later.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
