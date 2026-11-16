@@ -76,6 +76,11 @@ describe('getCategoryProductsServer', () => {
       page: 2
     });
 
+    const totalPages = page1.pagination.totalPages;
+    expect(totalPages).toBeGreaterThan(1);
+    expect(page1.data.length).toBeGreaterThan(0);
+    expect(page2.data.length).toBeGreaterThan(0);
+
     // Different pages should have different products
     expect(page1.data[0]._id).not.toBe(page2.data[0]._id);
     expect(page1.pagination.page).toBe(1);
