@@ -104,6 +104,23 @@ describe("CategoryPage", () => {
 		const items = within(list).getAllByRole("listitem");
 		expect(items).toHaveLength(2);
 	});
+	it("shows error message when products query fails", async () => {
+		// Mock the products client to throw an error
+		const { getCategoryProductsClient } = await import("@/features/categories/services/category.client");
+		vi.mocked(getCategoryProductsClient).mockImplementationOnce(async () => {
+			throw new Error("Network error");
+		});
+
+		renderWithProviders(
+			<CategoryPage slug="electronics" initialData={initialData} initialFilters={initialFilters} />
+		);
+
+		await waitFor(() => {
+			expect(screen.getByText(/network error/i)).toBeInTheDocument();
+			expect(screen.getByRole("button", { name: /retry/i })).toBeInTheDocument();
+		});
+	});			
+
 
 	it("loads and displays brands in the filters", async () => {
 		renderWithProviders(
