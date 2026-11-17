@@ -136,4 +136,18 @@ describe("CategoryPage", () => {
 			expect(screen.getByText(/Samsung/i)).toBeInTheDocument();
 		});
 	});
+
+	it("displays no products message when initial data is empty", async () => {
+		const emptyData: CategoryProductsResponse = {
+			success: true,
+			data: [],
+			pagination: { total: 0, page: 1, limit: 12, totalPages: 1 },
+		};
+
+		renderWithProviders(
+			<CategoryPage slug="electronics" initialData={emptyData} initialFilters={initialFilters} />
+		);
+
+		expect(await screen.findByText(/no products found/i)).toBeInTheDocument();
+	});
 });
