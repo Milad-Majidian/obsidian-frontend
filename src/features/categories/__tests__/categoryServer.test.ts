@@ -85,6 +85,7 @@ describe('getCategoryProductsServer', () => {
     expect(page1.data[0]._id).not.toBe(page2.data[0]._id);
     expect(page1.pagination.page).toBe(1);
     expect(page2.pagination.page).toBe(2);
+    expect(page2.success.valueOf).toBe(3); 
   });
 
   it('should throw error on failed fetch', async () => {
@@ -92,4 +93,5 @@ describe('getCategoryProductsServer', () => {
       getCategoryProductsServer({ slug: 'non-existent-category' })
     ).rejects.toThrow();
   });
+
 });
