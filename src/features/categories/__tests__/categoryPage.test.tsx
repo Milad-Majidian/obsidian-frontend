@@ -150,4 +150,18 @@ describe("CategoryPage", () => {
 
 		expect(await screen.findByText(/no products found/i)).toBeInTheDocument();
 	});
+
+	it("displays error message when initial data is invalid", async () => {
+		const invalidData: any = {
+			success: false,
+			data: null,
+			pagination: null,
+		};	
+
+		renderWithProviders(
+			<CategoryPage slug="electronics" initialData={invalidData} initialFilters={initialFilters} />
+		);
+
+		expect(await screen.findByText(/failed to load products/i)).toBeInTheDocument();
+	});
 });
