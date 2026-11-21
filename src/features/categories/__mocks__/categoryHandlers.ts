@@ -1,5 +1,5 @@
 // features/categories/__mocks__/categoryHandlers.ts
-import { http, HttpResponse, delay } from "msw";
+import { http, HttpResponse } from "msw";
 
 type Product = {
   _id: string;
@@ -153,6 +153,8 @@ const sorters: Record<string, (a: Product, b: Product) => number> = {
   name: (a, b) => a.name.localeCompare(b.name),
   price: (a, b) => a.price - b.price,
 };
+
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const categoryHandlers = [
   http.get("http://localhost:3001/products", async ({ request }) => {
