@@ -17,3 +17,16 @@ export function parseCategoryFilters(query: Record<string, string | string[] | u
     page: query.page ? Number(query.page) : 1,
   };
 }
+
+export function buildCategoryQueryString(filters: Omit<ProductQuery, "slug">): string {
+  const params = new URLSearchParams(); 
+  if (filters.brand) params.set("brand", filters.brand);
+  if (filters.minPrice !== undefined) params.set("minPrice", filters.minPrice.toString());
+  if (filters.maxPrice !== undefined) params.set("maxPrice", filters.maxPrice.toString());
+  if (filters.inStock !== undefined) params.set("inStock", filters.inStock.toString());
+  if (filters.sort) params.set("sort", filters.sort);
+  if (filters.order) params.set("order", filters.order);
+  if (filters.page !== 1) params.set("page", filters.page.toString());
+
+  return params.toString();
+}
