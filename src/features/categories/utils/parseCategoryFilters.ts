@@ -30,3 +30,16 @@ export function buildCategoryQueryString(filters: Omit<ProductQuery, "slug">): s
 
   return params.toString();
 }
+
+export function buildCategoryQueryObject(filters: Omit<ProductQuery, "slug">): Record<string, string> {
+  const queryObject: Record<string, string> = {};
+  if (filters.brand) queryObject.brand = filters.brand;
+  if (filters.minPrice !== undefined) queryObject.minPrice = filters.minPrice.toString();
+  if (filters.maxPrice !== undefined) queryObject.maxPrice = filters.maxPrice.toString();
+  if (filters.inStock !== undefined) queryObject.inStock = filters.inStock.toString();
+  if (filters.sort) queryObject.sort = filters.sort;
+  if (filters.order) queryObject.order = filters.order;
+  if (filters.page !== 1) queryObject.page = filters.page.toString();
+
+  return queryObject;
+}
