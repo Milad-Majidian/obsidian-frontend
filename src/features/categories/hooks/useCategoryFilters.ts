@@ -55,3 +55,5 @@ export function useCategoryFilters() {
     };
 
 }
+
+export default useCategoryFilters;
