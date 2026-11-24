@@ -28,3 +28,12 @@ export function useBrandsByCategoryAndSubcategory(category: string, subcategory:
     staleTime: 1000 * 60 * 10, // Cache for 10 min
   });
 }
+
+export function useBrandsByCategoryAndSubcategoryAndSubsubcategory(category: string, subcategory: string, subsubcategory: string, enabled:boolean = true) {
+  return useQuery({
+    queryKey: ["brandsByCategoryAndSubcategoryAndSubsubcategory", category, subcategory, subsubcategory],
+    queryFn: () => getAllBrandsClient(category, subcategory, subsubcategory),
+    enabled,          // Only fetch when enabled === true
+    staleTime: 1000 * 60 * 10, // Cache for 10 min
+  });
+}
